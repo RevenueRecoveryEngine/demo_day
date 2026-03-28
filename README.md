@@ -1,4 +1,4 @@
-# SCOUT Presentation App
+# demo_day
 
 A polished, investor-grade interactive Next.js application designed to present and demonstrate the **SCOUT** stage of the Revenue Recovery Engine (RRE).
 
