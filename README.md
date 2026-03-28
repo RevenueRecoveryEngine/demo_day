@@ -52,3 +52,4 @@ If you want to plug this into your real SCOUT API later:
    setRun(scoutRunData);
    ```
 3. Update `STAGE_DELAYS` in the same hook to match your real streaming/polling latency, or trigger stage changes via SSE/WebSocket events instead of fixed intervals.
+
