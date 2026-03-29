@@ -1,15 +1,21 @@
-'use client';
+"use client";
 // app/page.tsx — Ultra-Minimal Presentation Container
 
-import { useState, useEffect } from 'react';
-import { StoryIntro } from '@/components/StoryIntro';
-import { ChaosToScout } from '@/components/ChaosToScout';
-import { ScoutFlow } from '@/components/ScoutFlow';
-import { PostScoutRuntime } from '@/components/PostScoutRuntime';
-import { OrchestrationSlide } from '@/components/OrchestrationSlide';
-import { PresenterModePanel } from '@/components/PresenterModePanel';
+import { useState, useEffect } from "react";
+import { StoryIntro } from "@/components/StoryIntro";
+import { ChaosToScout } from "@/components/ChaosToScout";
+import { ScoutFlow } from "@/components/ScoutFlow";
+import { PostScoutRuntime } from "@/components/PostScoutRuntime";
+import { OrchestrationSlide } from "@/components/OrchestrationSlide";
+import { PresenterModePanel } from "@/components/PresenterModePanel";
 
-const SLIDES = ['story-intro', 'chaos-to-scout', 'scout-flow', 'post-scout-runtime', 'orchestration'];
+const SLIDES = [
+  "story-intro",
+  "chaos-to-scout",
+  "scout-flow",
+  "post-scout-runtime",
+  "orchestration",
+];
 
 export default function Home() {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -19,29 +25,52 @@ export default function Home() {
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
       // Ignore key events inside inputs
-      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
+      if (
+        e.target instanceof HTMLInputElement ||
+        e.target instanceof HTMLTextAreaElement
+      )
+        return;
 
       switch (e.key) {
-        case 'ArrowDown':
-        case ' ':
-        case 'ArrowRight':
+        case "ArrowDown":
+        case " ":
+        case "ArrowRight":
           e.preventDefault();
           setCurrentSlide((prev) => Math.min(prev + 1, SLIDES.length - 1));
           break;
-        case 'ArrowUp':
-        case 'ArrowLeft':
+        case "ArrowUp":
+        case "ArrowLeft":
           e.preventDefault();
           setCurrentSlide((prev) => Math.max(prev - 1, 0));
           break;
-        case 'p':
-        case 'P':
+        case "p":
+        case "P":
           setPresenterMode((m) => !m);
           break;
       }
     };
 
-    window.addEventListener('keydown', handleKey);
-    return () => window.removeEventListener('keydown', handleKey);
+    window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
+  }, []);
+
+  // Listen for remote commands from the Presenter window
+  useEffect(() => {
+    const channel = new BroadcastChannel("rre-demo-sync");
+
+    channel.onmessage = (event) => {
+      if (event.data.action === "next") {
+        window.dispatchEvent(
+          new KeyboardEvent("keydown", { key: "ArrowRight" }),
+        );
+      } else if (event.data.action === "prev") {
+        window.dispatchEvent(
+          new KeyboardEvent("keydown", { key: "ArrowLeft" }),
+        );
+      }
+    };
+
+    return () => channel.close();
   }, []);
 
   return (
@@ -62,8 +91,8 @@ export default function Home() {
             aria-label={`Go to slide ${i + 1}`}
             className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
               i === currentSlide
-                ? 'bg-violet-400 scale-125 shadow-[0_0_10px_rgba(139,92,246,0.6)]'
-                : 'bg-white/15 hover:bg-white/35'
+                ? "bg-violet-400 scale-125 shadow-[0_0_10px_rgba(139,92,246,0.6)]"
+                : "bg-white/15 hover:bg-white/35"
             }`}
           />
         ))}
@@ -73,7 +102,7 @@ export default function Home() {
       <PresenterModePanel
         isVisible={presenterMode}
         currentSection={SLIDES[currentSlide]}
-        currentStage={'idle'} // simplified for minimal layout
+        currentStage={"idle"} // simplified for minimal layout
         sectionIndex={currentSlide}
         totalSections={SLIDES.length}
       />
