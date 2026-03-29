@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { MASTER_SCRIPT } from "@/lib/speaker-notes";
 
@@ -18,17 +18,36 @@ export default function PresenterDashboard() {
     return () => channelRef.current?.close();
   }, []);
 
-  const triggerNext = () => {
-    const next = Math.min(globalStep + 1, MASTER_SCRIPT.length - 1);
-    setGlobalStep(next);
-    channelRef.current?.postMessage({ action: "setStep", step: next });
-  };
+  const triggerNext = useCallback(() => {
+    setGlobalStep((prev) => {
+      const next = Math.min(prev + 1, MASTER_SCRIPT.length - 1);
+      channelRef.current?.postMessage({ action: "setStep", step: next });
+      return next;
+    });
+  }, []);
 
-  const triggerPrev = () => {
-    const prev = Math.max(globalStep - 1, 0);
-    setGlobalStep(prev);
-    channelRef.current?.postMessage({ action: "setStep", step: prev });
-  };
+  const triggerPrev = useCallback(() => {
+    setGlobalStep((prev) => {
+      const prevStep = Math.max(prev - 1, 0);
+      channelRef.current?.postMessage({ action: "setStep", step: prevStep });
+      return prevStep;
+    });
+  }, []);
+
+  // Keyboard controls for the Presenter window (Space/Arrows)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (["ArrowRight", "ArrowDown", " "].includes(e.key)) {
+        e.preventDefault();
+        triggerNext();
+      } else if (["ArrowLeft", "ArrowUp"].includes(e.key)) {
+        e.preventDefault();
+        triggerPrev();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [triggerNext, triggerPrev]);
 
   return (
     <div className="flex w-full h-screen bg-[#030712] text-white overflow-hidden">
@@ -70,7 +89,7 @@ export default function PresenterDashboard() {
           </h2>
 
           {/* This is the ONLY script shown */}
-          <div className="text-4xl leading-relaxed font-medium text-white drop-shadow-md">
+          <div className="text-4xl leading-relaxed font-medium text-white drop-shadow-md whitespace-pre-wrap">
             {MASTER_SCRIPT[globalStep]}
           </div>
 
@@ -80,7 +99,7 @@ export default function PresenterDashboard() {
               <h3 className="text-sm text-white/30 font-mono mb-2 uppercase tracking-widest">
                 Coming Up Next:
               </h3>
-              <div className="text-xl leading-relaxed text-white/40 italic">
+              <div className="text-xl leading-relaxed text-white/40 italic whitespace-pre-wrap">
                 {MASTER_SCRIPT[globalStep + 1]}
               </div>
             </div>

@@ -1,13 +1,39 @@
 "use client";
 
 import { useState, useEffect } from "react";
+
+// 1. Import your slides here
+import { TitleSlide } from "@/components/TitleSlide";
+import { TeamSlide } from "@/components/TeamSlide";
 import { IntroSlider } from "@/components/IntroSlider";
 import { ChaosToScout } from "@/components/ChaosToScout";
 import { ScoutFlow } from "@/components/ScoutFlow";
 import { PostScoutRuntime } from "@/components/PostScoutRuntime";
 import { OrchestrationSlide } from "@/components/OrchestrationSlide";
-
-const TOTAL_STEPS = 25;
+import { StoryTheMismatch } from "@/components/StoryTheMismatch";
+import { StoryTheRootCause } from "@/components/StoryTheRootCause";
+import { TheIndustryProblem } from "@/components/TheIndustryProblem";
+// =====================================================================
+// 2. THE SLIDE MASTER LIST
+// Edit this array to add, remove, or reorder slides.
+// "steps" = how many times you press Next before the slide is finished.
+// =====================================================================
+const SLIDE_CONFIG = [
+  { component: TitleSlide, steps: 1 },
+  { component: TeamSlide, steps: 1 },
+  { component: StoryTheMismatch, steps: 3 }, // <--- The Customer fails
+  { component: StoryTheRootCause, steps: 3 }, // <--- The Merchant types & pays
+  { component: TheIndustryProblem, steps: 8 }, // <--- CHANGED FROM 4 TO 8  { component: IntroSlider, steps: 3 },
+  { component: ChaosToScout, steps: 2 },
+  { component: ScoutFlow, steps: 11 },
+  { component: PostScoutRuntime, steps: 5 },
+  { component: OrchestrationSlide, steps: 4 },
+];
+// Automatically calculates total steps so you never have to manually update it again
+const TOTAL_STEPS = SLIDE_CONFIG.reduce(
+  (total, slide) => total + slide.steps,
+  0,
+);
 
 export default function Home() {
   const [globalStep, setGlobalStep] = useState(0);
@@ -22,7 +48,7 @@ export default function Home() {
       }
     };
 
-    // If you use the keyboard on the main window, it syncs back to the presenter
+    // Keyboard sync logic
     const handleKey = (e: KeyboardEvent) => {
       if (
         e.target instanceof HTMLInputElement ||
@@ -54,34 +80,28 @@ export default function Home() {
     };
   }, []);
 
-  // Map the global step to the correct slide and internal animation state
-  let currentSlide = 0;
-  let internalStep = 0;
+  // =====================================================================
+  // 3. THE MAGICAL CALCULATOR
+  // This loop automatically figures out which slide to show and what
+  // internal animation frame to pass it, based on the global step.
+  // =====================================================================
+  let currentSlideIndex = 0;
+  let internalStep = globalStep;
 
-  if (globalStep < 3) {
-    currentSlide = 0;
-    internalStep = globalStep;
-  } else if (globalStep < 5) {
-    currentSlide = 1;
-    internalStep = globalStep - 3;
-  } else if (globalStep < 16) {
-    currentSlide = 2;
-    internalStep = globalStep - 5;
-  } else if (globalStep < 21) {
-    currentSlide = 3;
-    internalStep = globalStep - 16;
-  } else {
-    currentSlide = 4;
-    internalStep = globalStep - 21;
+  for (let i = 0; i < SLIDE_CONFIG.length; i++) {
+    if (internalStep < SLIDE_CONFIG[i].steps) {
+      currentSlideIndex = i;
+      break;
+    }
+    internalStep -= SLIDE_CONFIG[i].steps;
   }
+
+  // Render the currently active slide, passing its internal step
+  const ActiveSlideComponent = SLIDE_CONFIG[currentSlideIndex].component;
 
   return (
     <main className="w-full h-screen overflow-hidden bg-[#030712]">
-      {currentSlide === 0 && <IntroSlider step={internalStep} />}
-      {currentSlide === 1 && <ChaosToScout step={internalStep} />}
-      {currentSlide === 2 && <ScoutFlow step={internalStep} />}
-      {currentSlide === 3 && <PostScoutRuntime step={internalStep} />}
-      {currentSlide === 4 && <OrchestrationSlide step={internalStep} />}
+      <ActiveSlideComponent step={internalStep} />
     </main>
   );
 }
