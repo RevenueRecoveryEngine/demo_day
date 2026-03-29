@@ -1,26 +1,33 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
-import { SECTION_NOTES, STAGE_NOTES } from "@/lib/speaker-notes";
+import { MASTER_SCRIPT } from "@/lib/speaker-notes";
 
 export default function PresenterDashboard() {
   const channelRef = useRef<BroadcastChannel | null>(null);
+  const [globalStep, setGlobalStep] = useState(0);
 
   useEffect(() => {
     channelRef.current = new BroadcastChannel("rre-demo-sync");
+    channelRef.current.onmessage = (event) => {
+      if (event.data.action === "setStep") {
+        setGlobalStep(event.data.step);
+      }
+    };
     return () => channelRef.current?.close();
   }, []);
 
   const triggerNext = () => {
-    channelRef.current?.postMessage({ action: "next" });
-    // Also trigger it locally so the iframe preview updates
-    window.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowRight" }));
+    const next = Math.min(globalStep + 1, MASTER_SCRIPT.length - 1);
+    setGlobalStep(next);
+    channelRef.current?.postMessage({ action: "setStep", step: next });
   };
 
   const triggerPrev = () => {
-    channelRef.current?.postMessage({ action: "prev" });
-    window.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowLeft" }));
+    const prev = Math.max(globalStep - 1, 0);
+    setGlobalStep(prev);
+    channelRef.current?.postMessage({ action: "setStep", step: prev });
   };
 
   return (
@@ -30,15 +37,14 @@ export default function PresenterDashboard() {
         <div className="absolute top-4 left-4 z-10 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded animate-pulse">
           AUDIENCE VIEW
         </div>
-        {/* We use an iframe pointing to the main page to show the exact preview */}
         <div className="w-full h-full pointer-events-none scale-90 origin-center">
           <iframe src="/" className="w-full h-full border-0" />
         </div>
       </div>
 
-      {/* RIGHT HALF: Script & Controls */}
+      {/* RIGHT HALF: Single-Block Teleprompter */}
       <div className="w-1/2 h-full flex flex-col bg-[#0f111a]">
-        {/* Big Controls */}
+        {/* Top Controls */}
         <div className="flex items-center justify-between p-6 border-b border-white/10 bg-white/5 shrink-0">
           <button
             onClick={triggerPrev}
@@ -46,6 +52,9 @@ export default function PresenterDashboard() {
           >
             <ArrowLeft className="w-6 h-6" /> Previous
           </button>
+          <div className="font-mono text-white/50 text-sm">
+            Step {globalStep + 1} / {MASTER_SCRIPT.length}
+          </div>
           <button
             onClick={triggerNext}
             className="flex items-center gap-2 px-12 py-4 bg-violet-600 hover:bg-violet-500 rounded-xl text-xl font-bold transition-colors shadow-[0_0_30px_rgba(139,92,246,0.4)]"
@@ -54,41 +63,28 @@ export default function PresenterDashboard() {
           </button>
         </div>
 
-        {/* Scrollable Script Area */}
-        <div className="flex-1 overflow-y-auto p-8 space-y-12">
-          <div>
-            <h2 className="text-xl text-violet-400 font-mono mb-4 border-b border-white/10 pb-2">
-              Main Sections
-            </h2>
-            {Object.entries(SECTION_NOTES).map(([key, note]) => (
-              <div
-                key={key}
-                className="mb-6 p-4 bg-white/5 rounded-xl border border-white/10"
-              >
-                <h3 className="text-lg font-bold mb-2">{note.section}</h3>
-                <p className="text-white/70 text-lg leading-relaxed">
-                  {note.cue}
-                </p>
-              </div>
-            ))}
+        {/* Script Area */}
+        <div className="flex-1 flex flex-col justify-center p-12">
+          <h2 className="text-xl text-violet-400 font-mono mb-6 border-b border-white/10 pb-2 uppercase tracking-widest">
+            Read Now:
+          </h2>
+
+          {/* This is the ONLY script shown */}
+          <div className="text-4xl leading-relaxed font-medium text-white drop-shadow-md">
+            {MASTER_SCRIPT[globalStep]}
           </div>
 
-          <div>
-            <h2 className="text-xl text-blue-400 font-mono mb-4 border-b border-white/10 pb-2">
-              SCOUT Demo Stages
-            </h2>
-            {Object.entries(STAGE_NOTES).map(([key, text]) => (
-              <div
-                key={key}
-                className="mb-4 p-4 bg-white/5 rounded-xl border border-white/10"
-              >
-                <h3 className="text-sm font-bold mb-2 uppercase text-blue-300">
-                  {key}
-                </h3>
-                <p className="text-white/70 text-lg leading-relaxed">{text}</p>
+          {/* Up Next Preview */}
+          {globalStep < MASTER_SCRIPT.length - 1 && (
+            <div className="mt-12 pt-8 border-t border-white/10">
+              <h3 className="text-sm text-white/30 font-mono mb-2 uppercase tracking-widest">
+                Coming Up Next:
+              </h3>
+              <div className="text-xl leading-relaxed text-white/40 italic">
+                {MASTER_SCRIPT[globalStep + 1]}
               </div>
-            ))}
-          </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

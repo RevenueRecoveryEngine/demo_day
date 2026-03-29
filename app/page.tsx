@@ -1,118 +1,87 @@
 "use client";
-// app/page.tsx — Ultra-Minimal Presentation Container
 
 import { useState, useEffect } from "react";
-import { StoryIntro } from "@/components/StoryIntro";
+import { IntroSlider } from "@/components/IntroSlider";
 import { ChaosToScout } from "@/components/ChaosToScout";
 import { ScoutFlow } from "@/components/ScoutFlow";
 import { PostScoutRuntime } from "@/components/PostScoutRuntime";
 import { OrchestrationSlide } from "@/components/OrchestrationSlide";
-import { PresenterModePanel } from "@/components/PresenterModePanel";
 
-const SLIDES = [
-  "story-intro",
-  "chaos-to-scout",
-  "scout-flow",
-  "post-scout-runtime",
-  "orchestration",
-];
+const TOTAL_STEPS = 25;
 
 export default function Home() {
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const [presenterMode, setPresenterMode] = useState(false);
+  const [globalStep, setGlobalStep] = useState(0);
 
-  // Keyboard navigation
   useEffect(() => {
+    const channel = new BroadcastChannel("rre-demo-sync");
+
+    // Listen for commands from the presenter dashboard
+    channel.onmessage = (event) => {
+      if (event.data.action === "setStep") {
+        setGlobalStep(event.data.step);
+      }
+    };
+
+    // If you use the keyboard on the main window, it syncs back to the presenter
     const handleKey = (e: KeyboardEvent) => {
-      // Ignore key events inside inputs
       if (
         e.target instanceof HTMLInputElement ||
         e.target instanceof HTMLTextAreaElement
       )
         return;
 
-      switch (e.key) {
-        case "ArrowDown":
-        case " ":
-        case "ArrowRight":
-          e.preventDefault();
-          setCurrentSlide((prev) => Math.min(prev + 1, SLIDES.length - 1));
-          break;
-        case "ArrowUp":
-        case "ArrowLeft":
-          e.preventDefault();
-          setCurrentSlide((prev) => Math.max(prev - 1, 0));
-          break;
-        case "p":
-        case "P":
-          setPresenterMode((m) => !m);
-          break;
+      if (["ArrowRight", "ArrowDown", " "].includes(e.key)) {
+        e.preventDefault();
+        setGlobalStep((p) => {
+          const next = Math.min(p + 1, TOTAL_STEPS - 1);
+          channel.postMessage({ action: "setStep", step: next });
+          return next;
+        });
+      } else if (["ArrowLeft", "ArrowUp"].includes(e.key)) {
+        e.preventDefault();
+        setGlobalStep((p) => {
+          const prev = Math.max(p - 1, 0);
+          channel.postMessage({ action: "setStep", step: prev });
+          return prev;
+        });
       }
     };
 
     window.addEventListener("keydown", handleKey);
-    return () => window.removeEventListener("keydown", handleKey);
-  }, []);
-
-  // Listen for remote commands from the Presenter window
-  useEffect(() => {
-    const channel = new BroadcastChannel("rre-demo-sync");
-
-    channel.onmessage = (event) => {
-      if (event.data.action === "next") {
-        window.dispatchEvent(
-          new KeyboardEvent("keydown", { key: "ArrowRight" }),
-        );
-      } else if (event.data.action === "prev") {
-        window.dispatchEvent(
-          new KeyboardEvent("keydown", { key: "ArrowLeft" }),
-        );
-      }
+    return () => {
+      channel.close();
+      window.removeEventListener("keydown", handleKey);
     };
-
-    return () => channel.close();
   }, []);
+
+  // Map the global step to the correct slide and internal animation state
+  let currentSlide = 0;
+  let internalStep = 0;
+
+  if (globalStep < 3) {
+    currentSlide = 0;
+    internalStep = globalStep;
+  } else if (globalStep < 5) {
+    currentSlide = 1;
+    internalStep = globalStep - 3;
+  } else if (globalStep < 16) {
+    currentSlide = 2;
+    internalStep = globalStep - 5;
+  } else if (globalStep < 21) {
+    currentSlide = 3;
+    internalStep = globalStep - 16;
+  } else {
+    currentSlide = 4;
+    internalStep = globalStep - 21;
+  }
 
   return (
     <main className="w-full h-screen overflow-hidden bg-[#030712]">
-      {/* Active Slide */}
-      {currentSlide === 0 && <StoryIntro />}
-      {currentSlide === 1 && <ChaosToScout />}
-      {currentSlide === 2 && <ScoutFlow />}
-      {currentSlide === 3 && <PostScoutRuntime />}
-      {currentSlide === 4 && <OrchestrationSlide />}
-
-      {/* Navigation dots */}
-      <div className="fixed right-6 top-1/2 -translate-y-1/2 z-40 flex flex-col gap-3">
-        {SLIDES.map((id, i) => (
-          <button
-            key={id}
-            onClick={() => setCurrentSlide(i)}
-            aria-label={`Go to slide ${i + 1}`}
-            className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
-              i === currentSlide
-                ? "bg-violet-400 scale-125 shadow-[0_0_10px_rgba(139,92,246,0.6)]"
-                : "bg-white/15 hover:bg-white/35"
-            }`}
-          />
-        ))}
-      </div>
-
-      {/* Presenter Mode Panel */}
-      <PresenterModePanel
-        isVisible={presenterMode}
-        currentSection={SLIDES[currentSlide]}
-        currentStage={"idle"} // simplified for minimal layout
-        sectionIndex={currentSlide}
-        totalSections={SLIDES.length}
-      />
-
-      {/* Keyboard hint */}
-      <div className="fixed top-6 left-6 z-30 flex items-center gap-3 px-4 py-2 rounded-full border border-white/10 bg-white/5 backdrop-blur text-white/30 text-xs shadow-xl pointer-events-none">
-        <span>Space / Arrows to navigate</span>
-        <span className="w-px h-3 bg-white/15" />
-        <span>P for presenter mode</span>
-      </div>
+      {currentSlide === 0 && <IntroSlider step={internalStep} />}
+      {currentSlide === 1 && <ChaosToScout step={internalStep} />}
+      {currentSlide === 2 && <ScoutFlow step={internalStep} />}
+      {currentSlide === 3 && <PostScoutRuntime step={internalStep} />}
+      {currentSlide === 4 && <OrchestrationSlide step={internalStep} />}
     </main>
   );
 }

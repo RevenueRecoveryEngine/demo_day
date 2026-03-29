@@ -39,3 +39,40 @@ export const STAGE_NOTES: Record<string, string> = {
   output: 'CRITIC receives a clean, structured handoff: scrape_id, listing_text, and shaped reviews.',
   complete: 'Run complete. SCOUT output is ready for CRITIC.',
 };
+
+export const MASTER_SCRIPT = [
+  // Slide 0: Story Intro
+  "Welcome. Let's talk about the Revenue Recovery Engine and why scraping as a single step is a broken mental model.",
+  "Without RRE, vague listings create expectation gaps, resulting in high return risks.",
+  "With RRE, we set accurate expectations. We don't guess; we collect evidence.",
+
+  // Slide 1: Chaos To System
+  "Most teams treat scraping as a single step—fetch HTML and hope it works. That fails in real-world conditions.",
+  "SCOUT is different. It is an intelligent decision system, not just a scraper.",
+
+  // Slide 2: Scout Flow (11 states for nodes + popups)
+  "Let's look at the SCOUT flow. It starts with the URL.",
+  "First, Strategy. RRE decides how to approach the site before collecting any evidence.",
+  "We analyze the domain, pagination type, and anti-bot tier to build an exact extraction plan.",
+  "Next, Waterfall Execution. We escalate only when cheaper methods fail.",
+  "We try API, then HTML, and only use headless browsers as a last resort.",
+  "Then, Cascade Resolution. We need the cleanest product context possible.",
+  "We check Shopify native JSON, headless state, and finally DOM fallback.",
+  "Finally, the Quality Gate. This is crucial.",
+  "We deduplicate, rank signals, and cap the reviews. Weak data is discarded here.",
+  "The final structured output is now ready...",
+  "...and this clean payload is handed off to CRITIC.",
+
+  // Slide 3: Post Scout Runtime
+  "Now, let's see what happens after SCOUT. Unstructured data arrives.",
+  "CRITIC (our LLM) analyzes the data to extract expectation gaps and attributes.",
+  "Then, a deterministic TypeScript logic gate checks required pillars. Code catches what AI misses.",
+  "PRESCRIBER takes these gaps and drafts surgical edits for the listing.",
+  "Finally, a TypeScript Safety Gate scans for numeric hallucinations before anything ships.",
+
+  // Slide 4: Orchestration
+  "All of this runs on Inngest for orchestration. Here is the pipeline.",
+  "Without orchestration, a single failure breaks the whole chain and progress is lost.",
+  "With Inngest, state persists. If CRITIC fails, it retries right there. PRESCRIBER just waits.",
+  "Three agents. Zero babysitting. Resilient, observable, and perfectly coordinated."
+];
