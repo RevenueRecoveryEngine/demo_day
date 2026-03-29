@@ -14,6 +14,9 @@ import { StoryTheMismatch } from "@/components/StoryTheMismatch";
 import { StoryTheRootCause } from "@/components/StoryTheRootCause";
 import { TheIndustryProblem } from "@/components/TheIndustryProblem";
 import { TheBlueprint } from "@/components/TheBlueprint";
+import { SystemNodes } from "@/components/SystemNodes";
+import { TheHardTruths } from "@/components/TheHardTruths";
+import { SystemArchitecture } from "@/components/SystemArchitecture";
 // =====================================================================
 // 2. THE SLIDE MASTER LIST
 // Edit this array to add, remove, or reorder slides.
@@ -25,6 +28,9 @@ const SLIDE_CONFIG = [
   { component: StoryTheMismatch, steps: 3 },
   { component: StoryTheRootCause, steps: 3 },
   { component: TheIndustryProblem, steps: 8 },
+  { component: SystemNodes, steps: 5 }, // <--- NEW: 5 clicks
+  { component: TheHardTruths, steps: 4 }, // <--- NEW: 4 clicks
+  { component: SystemArchitecture, steps: 3 }, // <--- NEW: 3 clicks
   { component: ChaosToScout, steps: 2 },
   { component: ScoutFlow, steps: 11 },
   { component: PostScoutRuntime, steps: 5 },

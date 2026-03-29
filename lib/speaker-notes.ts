@@ -56,6 +56,29 @@ A system that doesn’t just analyze data…
 it tells you exactly where your listing is wrong,
 why customers are failing,
 and what to change — with evidence.`,
+// ==========================================
+  // Slide 5: The System Nodes (5 clicks)
+  // ==========================================
+  `It consistes of Three parts:`,
+  `SCOUT which is resposible for scraping the product listing and reviews`,
+  `CRITIC  which turns the listings and reviews from messy text into structured expectation gaps`,
+  `PRESCRIBER that prescribes edits and flags problems in the listing`,
+  `Outputting the final surgical edits.`,
+
+  // ==========================================
+  // Slide 6: The Hard Truths (4 clicks)
+  // ==========================================
+  `And here’s what we learned building it:`,
+  `If your data pipeline is weak, your AI is useless.`,
+  `If your scraping breaks, your system lies.`,
+  `If your output isn’t defensible, it’s just guesswork with better branding.`,
+
+  // ==========================================
+  // Slide 7: System Architecture Photo (3 clicks)
+  // ==========================================
+  `So instead of showing you another polished demo…`,
+  `we’re going to show you what most people avoid: how to actually build this properly.`,
+  `Starting with scraping.`,
 
   // --- NEW SCOUT SLIDES ---
 
