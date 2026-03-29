@@ -13,6 +13,7 @@ import { OrchestrationSlide } from "@/components/OrchestrationSlide";
 import { StoryTheMismatch } from "@/components/StoryTheMismatch";
 import { StoryTheRootCause } from "@/components/StoryTheRootCause";
 import { TheIndustryProblem } from "@/components/TheIndustryProblem";
+import { TheBlueprint } from "@/components/TheBlueprint";
 // =====================================================================
 // 2. THE SLIDE MASTER LIST
 // Edit this array to add, remove, or reorder slides.
@@ -21,13 +22,14 @@ import { TheIndustryProblem } from "@/components/TheIndustryProblem";
 const SLIDE_CONFIG = [
   { component: TitleSlide, steps: 1 },
   { component: TeamSlide, steps: 1 },
-  { component: StoryTheMismatch, steps: 3 }, // <--- The Customer fails
-  { component: StoryTheRootCause, steps: 3 }, // <--- The Merchant types & pays
-  { component: TheIndustryProblem, steps: 8 }, // <--- CHANGED FROM 4 TO 8  { component: IntroSlider, steps: 3 },
+  { component: StoryTheMismatch, steps: 3 },
+  { component: StoryTheRootCause, steps: 3 },
+  { component: TheIndustryProblem, steps: 8 },
   { component: ChaosToScout, steps: 2 },
   { component: ScoutFlow, steps: 11 },
   { component: PostScoutRuntime, steps: 5 },
   { component: OrchestrationSlide, steps: 4 },
+  { component: TheBlueprint, steps: 5 },
 ];
 // Automatically calculates total steps so you never have to manually update it again
 const TOTAL_STEPS = SLIDE_CONFIG.reduce(

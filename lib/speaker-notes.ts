@@ -55,5 +55,140 @@ A system that doesn’t just analyze data…
 
 it tells you exactly where your listing is wrong,
 why customers are failing,
-and what to change — with evidence.`
+and what to change — with evidence.`,
+
+  // --- NEW SCOUT SLIDES ---
+
+  // Slide 5: ChaosToScout (2 steps)
+  `Let me show you what really happens when you try to extract data from the web.
+
+You start with a simple idea:
+fetch the page, parse the HTML, get your data.
+
+But in reality, the web fights back.
+
+Pages are inconsistent.
+Providers are hidden.
+Anti-bot systems block you.
+And the data you get is noisy and unreliable.
+
+So your AI ends up making decisions on bad input.
+
+That’s the real problem.`,
+
+  `Now, instead of treating scraping as a simple step,
+we treated it as a system that needs to think.
+
+That’s where SCOUT comes in.
+
+SCOUT is not a scraper.
+It’s a decision engine designed to navigate this chaos.`,
+
+  // Slide 6: ScoutFlow (11 steps)
+  `When a user submits a product URL, SCOUT takes over.`,
+
+  `First, strategy.
+  It looks at the domain and decides how to approach it —
+pagination, anti-bot behavior, structure.
+
+If it knows the site, it uses a precise plan.
+If not, it falls back to a safe default.`,
+
+  `Then comes extraction.`,
+
+  `SCOUT doesn’t rely on one method.
+
+It starts simple — direct extraction and known providers.
+
+If that fails, it escalates to headless scraping like ZenRows,
+and can fall back to Apify.`,
+
+  `At the same time, it looks for the best data source:`,
+
+  `Shopify JSON first, then headless state, then DOM.
+
+Always prioritizing signal over noise.`,
+
+  `And finally, filtering.`,
+
+  `It cleans the data, removes duplicates, ranks by signal strength,
+and keeps only the most meaningful insights.`,
+
+  `Because more data is not better.
+
+Better data is better.`,
+
+  `At the end, SCOUT delivers structured, reliable evidence.`,
+
+  // Slide 7: PostScoutRuntime (5 steps)
+  `And this is the key idea:
+
+The web is chaotic.
+
+  SCOUT brings structure.
+
+  It doesn’t just scrape.
+
+It decides.
+
+  And that’s why it’s not an ingestion step.
+
+  It’s a quality gate for everything that comes next.`,
+  // Slide 7: PostScoutRuntime (5 steps)
+  `So now you've seen the data come in. Let me tell you what not to do with it.
+
+You take the data, send it to an LLM, and expect a reliable decision back. But in practice, that’s not what happens. The model gives you an answer, and if you run it again on the same input, you can get a different one.
+
+Meanwhile, your system doesn’t wait. It already acted on one of those outputs. In our case, that means telling a merchant to change their product listing — and they apply it. At that point, it’s not just an AI response anymore. It’s a business decision based on something that isn’t consistent.
+
+So instead of asking what the LLM can do, focous on where it fails — and removed it from those parts.`,
+
+  `in our case 
+After SCOUT, everything goes into CRITIC.
+
+CRITIC finds where the listing says one thing and customers report something else.
+
+We still use an LLM, but only to extract structured attributes. No decisions, just turning text into structured data.`,
+
+  `From there, everything is handled in code. We validate against a strict schema, and if something is missing or inconsistent, we handle it directly. No second model call, no guessing.`,
+
+  `Then PRESCRIBER takes those gaps and suggests edits, but only when they’re clearly supported by the data. If the evidence isn’t there, it doesn’t try to fill it in. It flags it.`,
+
+  `The principle is simple. Don’t ask AI to do things it’s bad at. LLMs are excellent at transforming language, but unreliable when you expect precision.
+
+If you don’t know the difference, you shouldn’t be building with them.
+
+Jibin, tell them how we kept this system running reliably on serverless infrastructure.`,
+// Slide 8: OrchestrationSlide (4 steps)
+  `So our pipeline is simple on the surface — SCOUT scrapes, CRITIC analyses, PRESCRIBER drafts the fix.`,
+
+  `That's 3 separate AI operations. Each one can be slow. Each one can fail mid-process.
+Chaining them together and hoping nothing breaks? That's a huge risk in production.`,
+
+  `So to solve that, we use Inngest — a durable workflow engine that controls traffic through the pipeline. Every step is registered as an isolated job.
+If SCOUT finishes but CRITIC crashes halfway through, Inngest doesn't restart the whole pipeline — it retries from the failed stage. No polling loops. No always-on server. No manual retry logic.`,
+
+  `Each job is also observable — we can see in real time which step is running, how long it took, and what failed. During development, that alone saved us hours of debugging.
+The result: a pipeline that runs on serverless infrastructure, handles LLM timeouts gracefully, and doesn't need babysitting.
+That's how three AI agents stay coordinated — without falling apart.`,
+// ==========================================
+  // Slide 9: The Blueprint (5 clicks)
+  // ==========================================
+  `And to close this — none of this works without alignment.`,
+
+  `In systems like this, the biggest risk isn’t complexity. 
+
+It’s drift.`,
+
+  `So we built a single source of truth. 
+
+A blueprint that defines how the system behaves and what “correct” means.`,
+
+  `And when something is unclear, we don’t guess. 
+
+We go back to it.`,
+
+  `Because consistency isn’t optional. 
+
+It’s the foundation.`
 ];
