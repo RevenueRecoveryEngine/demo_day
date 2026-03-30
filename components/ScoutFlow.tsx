@@ -1,137 +1,121 @@
 "use client";
-// components/ScoutFlow.tsx — Slide 2: SCOUT Internal Flow
-
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Network, ServerCog, DatabaseZap, CheckCircle2, ChevronRight, Activity, TerminalSquare, Layers, Fingerprint } from "lucide-react";
 
-type FlowStage =
-  | "idle"
-  | "strategy"
-  | "waterfall"
-  | "cascade"
-  | "quality"
-  | "output";
+type FlowStage = "idle" | "strategy" | "waterfall" | "cascade" | "quality" | "output";
 
-const STAGES: FlowStage[] = [
-  "idle",
-  "strategy",
-  "waterfall",
-  "cascade",
-  "quality",
-  "output",
-];
+const STAGES: FlowStage[] = ["idle", "strategy", "waterfall", "cascade", "quality", "output"];
 
-// --- DATA: Stage Content ---
-// Tailwind requires explicit class names for the parser to preserve them
 const STAGE_CONTENT: Record<string, any> = {
   strategy: {
-    title: "Strategy Selected",
-    subtitle:
-      "RRE decides how to approach the site before collecting any evidence.",
+    icon: Fingerprint,
+    title: "Strategy Selection",
+    subtitle: "Fingerprinting domain layout & constraints",
     theme: {
       text: "text-violet-400",
-      fromBg: "from-violet-500/10",
+      fromBg: "from-violet-500/20",
+      border: "border-violet-500/30",
       highlightText: "text-violet-300",
       highlightBg: "bg-violet-500/20",
-      barBg: "bg-violet-500",
+      glow: "shadow-[0_0_30px_rgba(139,92,246,0.3)]",
     },
     items: [
-      { label: "URL analyzed", value: "lasfit.com" },
-      { label: "Domain matched", value: "target config" },
-      { label: "Pagination type", value: "load_more_button" },
-      { label: "Anti-bot tier", value: "Tier 1" },
-      { label: "Review provider candidates", value: "Judge.me, Yotpo" },
-      {
-        label: "Status",
-        value: "Extraction plan initialized",
-        highlight: true,
-      },
+      { label: "DNS / Domain Match", value: "lasfit.com (Known Tier)" },
+      { label: "Pagination Strategy", value: "cursor_based_api" },
+      { label: "Anti-Bot Evasion", value: "Tier 1: TLS + Proxies" },
+      { label: "Target Provider", value: "Judge.me Widget", highlight: true },
+      { label: "Execution Logic", value: "[PLAN_ARMED]" },
     ],
   },
   waterfall: {
-    title: "Waterfall Execution",
-    subtitle: "RRE escalates only when cheaper extraction methods fail.",
+    icon: Layers,
+    title: "Extraction Waterfall",
+    subtitle: "Resilient fallback mechanics deployed",
     theme: {
       text: "text-blue-400",
-      fromBg: "from-blue-500/10",
+      fromBg: "from-blue-500/20",
+      border: "border-blue-500/30",
       highlightText: "text-blue-300",
       highlightBg: "bg-blue-500/20",
-      barBg: "bg-blue-500",
+      glow: "shadow-[0_0_30px_rgba(59,130,246,0.3)]",
     },
     items: [
-      { label: "Attempt 1", value: "Provider/API lookup" },
-      { label: "Attempt 2", value: "Raw HTML parsing" },
-      { label: "Attempt 3", value: "Headless browser fallback" },
-      {
-        label: "Selected successful path",
-        value: "HTML + provider signals",
-        highlight: true,
-      },
-      { label: "Status", value: "Review data source detected" },
+      { label: "Attempt 0: Internal API", value: "[FAILED 403]" },
+      { label: "Attempt 1: Raw HTML", value: "[FAILED Missing Data]" },
+      { label: "Attempt 2: Headless + JS", value: "[SUCCESS]", highlight: true },
+      { label: "Active Session", value: "Playwright / Chromium" },
+      { label: "Data Retrieved", value: "1.2MB JSON payload" },
     ],
     visual: true,
   },
   cascade: {
-    title: "Cascade Resolution",
-    subtitle:
-      "RRE uses a structured cascade to get the cleanest product context.",
+    icon: Network,
+    title: "Source Cascade",
+    subtitle: "Prioritizing ground-truth data models",
     theme: {
       text: "text-teal-400",
-      fromBg: "from-teal-500/10",
+      fromBg: "from-teal-500/20",
+      border: "border-teal-500/30",
       highlightText: "text-teal-300",
       highlightBg: "bg-teal-500/20",
-      barBg: "bg-teal-500",
+      glow: "shadow-[0_0_30px_rgba(20,184,166,0.3)]",
     },
     items: [
-      { label: "Path A", value: "Native JSON" },
-      { label: "Path B", value: "Embedded state" },
-      { label: "Path C", value: "DOM fallback" },
-      { label: "Chosen source", value: "Native JSON", highlight: true },
-      { label: "listing_text_source", value: "NATIVE_JSON" },
+      { label: "GraphQL State", value: "[EMPTY]" },
+      { label: "Next.js __NEXT_DATA__", value: "[DETECTED]" },
+      { label: "Native JSON LD", value: "[DETECTED, PREFERRED]", highlight: true },
+      { label: "Confidence Score", value: "99.8%" },
     ],
   },
   quality: {
+    icon: Activity,
     title: "Quality Validation",
-    subtitle:
-      "Only validated, structured evidence moves forward in the RRE pipeline.",
+    subtitle: "Filtration and normalization of assets",
     theme: {
       text: "text-emerald-400",
-      fromBg: "from-emerald-500/10",
+      fromBg: "from-emerald-500/20",
+      border: "border-emerald-500/30",
       highlightText: "text-emerald-300",
       highlightBg: "bg-emerald-500/20",
-      barBg: "bg-emerald-500",
+      glow: "shadow-[0_0_30px_rgba(16,185,129,0.3)]",
     },
     items: [
-      { label: "Reviews normalized", value: "Done" },
-      { label: "Title/body formatting", value: "Checked" },
-      { label: "Duplicates removed", value: "Done" },
-      { label: "Ratings validated", value: "Done" },
-      { label: "Output contract", value: "Validated", highlight: true },
+      { label: "Deduplication", value: "Removed 12 records" },
+      { label: "Noise Reduction", value: "Stripped HTML tags" },
+      { label: "Schema Validation", value: "Zod Pass: Product & Reviews" },
+      { label: "Payload Status", value: "[SECURED & READY]", highlight: true },
     ],
-    snippet: `reviews_selected: 30\nlisting_text_source: NATIVE_JSON\nprovider: Judge.me`,
+    snippet: `[FILTER_LOG]\n> schema_match: TRUE\n> duplicates_dropped: 12\n> reviews_saved: 30\n> source: NATIVE_JSON`,
   },
   output: {
-    title: "Output Ready",
-    subtitle: "Structured payload ready for CRITIC / PRESCRIBER",
+    icon: TerminalSquare,
+    title: "Payload Assembly",
+    subtitle: "Final structured evidence output",
     theme: {
       text: "text-white",
-      fromBg: "from-white/10",
+      fromBg: "from-white/20",
+      border: "border-white/30",
       highlightText: "text-white",
       highlightBg: "bg-white/20",
-      barBg: "bg-white",
+      glow: "shadow-[0_0_40px_rgba(255,255,255,0.2)]",
     },
     codeSnippet: `{
-  "scrape_id": "uuid-string-84a1-b2",
+  "scrape_status": "SUCCESS",
+  "metadata": {
+     "duration_ms": 3402,
+     "source_url": "..."
+  },
   "listing_text": "High-performance LED lighting upgrade for Ford F150...",
   "reviews": [
     {
-      "review_id": "rev_001",
-      "text": "Chevy 2016 Silverado\\nThese are a night and day difference...",
+      "id": "rev_001",
+      "text": "Chevy 2016 Silverado\\nNight and day difference...",
       "rating": 1
     },
     {
-      "review_id": "rev_002",
-      "text": "Install was easy but brightness was lower than expected...",
+      "id": "rev_002",
+      "text": "Install easy but brightness lower than expected...",
       "rating": 2
     }
   ]
@@ -139,356 +123,211 @@ const STAGE_CONTENT: Record<string, any> = {
   },
 };
 
-// --- COMPONENT ---
 export function ScoutFlow({ step }: { step: number }) {
-  // Map the single step to your node index and popup visibility
   const stageIdx = Math.floor((step + 1) / 2);
   const isPopupVisible = step % 2 !== 0;
 
   const currentStage = STAGES[stageIdx];
-  const isPast = (s: FlowStage) =>
-    STAGES.indexOf(currentStage) > STAGES.indexOf(s);
+  const isPast = (s: FlowStage) => STAGES.indexOf(currentStage) > STAGES.indexOf(s);
   const isActive = (s: FlowStage) => currentStage === s;
-  const popupData =
-    currentStage !== "idle" ? STAGE_CONTENT[currentStage] : null;
+  const popupData = currentStage !== "idle" ? STAGE_CONTENT[currentStage] : null;
 
-  // DELETE the useState hooks and the entire useEffect handleKey block!
+  const renderNode = (id: FlowStage, Icon: any, label: string, color: string, activeColor: string) => {
+    const active = isActive(id);
+    const past = isPast(id);
+    const stateColor = active ? activeColor : past ? color : "text-white/20";
+    const bgClass = active ? "bg-[#060b1f] border-violet-500/50" : past ? "bg-white/5 border-white/20" : "bg-white/5 border-white/5";
+
+    return (
+      <div className="relative w-full flex flex-col items-center">
+        {/* Connection Line */}
+        {id !== "strategy" && (
+          <div className="w-0.5 h-10 relative bg-white/5">
+            {past && <div className={`absolute inset-0 w-full h-full bg-gradient-to-b ${color}`} />}
+            {active && !isPopupVisible && (
+              <motion.div
+                className={`w-full bg-gradient-to-b ${color}`}
+                initial={{ height: "0%" }}
+                animate={{ height: "100%" }}
+                transition={{ duration: 1 }}
+              />
+            )}
+            {past && !isPopupVisible && (
+               <motion.div className="w-full h-4 bg-white/50 blur-[2px] absolute" animate={{ top: ["0%", "100%"] }} transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }} />
+            )}
+          </div>
+        )}
+
+        <motion.div
+          className={`w-full max-w-[280px] p-4 rounded-xl border backdrop-blur-md transition-all duration-700 flex items-center gap-4 relative overflow-hidden ${bgClass}`}
+          animate={{ scale: active ? 1.05 : past ? 0.95 : 0.9, opacity: active || past ? 1 : 0.3 }}
+        >
+          {active && <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -skew-x-12 translate-x-[-150%] animate-[shimmer_2s_infinite]" />}
+          <div className={`p-2 rounded-lg ${active ? "bg-white/10" : "bg-black/20"}`}>
+            <Icon className={`w-5 h-5 ${stateColor}`} strokeWidth={active ? 2.5 : 1.5} />
+          </div>
+          <div className={`font-mono text-sm tracking-[0.15em] uppercase font-bold ${stateColor}`}>
+            {label}
+          </div>
+          {active && !isPopupVisible && (
+            <motion.div className="absolute right-4 w-2 h-2 rounded-full bg-current" animate={{ opacity: [1, 0, 1] }} transition={{ duration: 0.8, repeat: Infinity }} style={{ color: activeColor.replace('text-', '') }} />
+          )}
+        </motion.div>
+      </div>
+    );
+  };
+
   return (
-    <div className="relative w-full h-screen flex flex-col items-center justify-center overflow-hidden bg-[#030712] px-6">
+    <div className="relative w-full h-screen flex flex-col items-center justify-center overflow-hidden bg-[#020617] px-6 font-sans">
+      {/* Abstract Background */}
+      <div className="absolute inset-0">
+         <motion.div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full blur-[100px] opacity-10 pointer-events-none" animate={{ background: "radial-gradient(circle, rgba(139,92,246,0.8) 0%, transparent 70%)" }} />
+         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] mix-blend-overlay pointer-events-none"></div>
+      </div>
+
       <motion.div
-        className="absolute inset-0 w-full h-full flex flex-col items-center justify-center pt-10 pb-10"
+        className="absolute inset-0 w-full h-full flex items-center justify-between px-20 pt-10 pb-10 max-w-7xl mx-auto"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1.2, ease: "easeInOut" }}
       >
-        {/* Central Pipeline Visual */}
-        <div
-          className={`relative w-full max-w-2xl flex flex-col items-center transition-all duration-700 ${isPopupVisible ? "opacity-30 blur-[2px] scale-95" : "opacity-100 scale-100"}`}
-        >
-          {/* URL Input */}
-          <div className="mb-8 font-mono text-xl tracking-widest text-white/50 uppercase">
-            URL
+        {/* Left Side: Pipeline Visual */}
+        <div className={`relative w-full max-w-md flex flex-col items-center justify-center transition-all duration-[800ms] ${isPopupVisible ? "opacity-20 blur-md -translate-x-10 scale-95" : "opacity-100 translate-x-0 scale-100"}`}>
+          
+          <div className="mb-6 flex items-center gap-3 bg-white/5 px-6 py-2 rounded-full border border-white/10">
+            <ServerCog className="w-4 h-4 text-violet-400" />
+            <span className="font-mono text-[11px] tracking-[0.2em] text-white/50 uppercase font-bold">Execution Pipeline</span>
           </div>
 
-          {/* 1. STRATEGY */}
-          <div className="relative w-full flex flex-col items-center">
-            <div
-              className={`w-0.5 h-8 transition-colors duration-700 ${isPast("idle") ? "bg-violet-500" : "bg-white/10"}`}
-            />
-            <motion.div
-              className={`w-full max-w-sm px-8 py-5 rounded-2xl border text-center transition-all duration-700 border-violet-500 ${
-                isActive("strategy")
-                  ? "bg-violet-500/20 shadow-[0_0_40px_rgba(139,92,246,0.3)] scale-105"
-                  : isPast("strategy")
-                    ? "bg-violet-500/5 opacity-60 scale-95"
-                    : "border-white/10 bg-white/5 opacity-30 scale-95"
-              }`}
-            >
-              <h2
-                className={`text-3xl font-bold tracking-widest transition-colors duration-700 ${isActive("strategy") ? "text-violet-400 drop-shadow-[0_0_15px_rgba(139,92,246,0.5)]" : "text-white/40"}`}
-              >
-                STRATEGY
-              </h2>
-            </motion.div>
-          </div>
-
-          {/* 2. WATERFALL */}
-          <div className="relative w-full flex flex-col items-center">
-            <div className="relative">
-              <div
-                className={`w-0.5 h-12 transition-colors duration-700 ${isPast("strategy") ? "bg-blue-500" : "bg-white/10"}`}
-              >
-                {isActive("strategy") && !isPopupVisible && (
-                  <motion.div
-                    className="w-0.5 h-full bg-blue-400"
-                    animate={{ scaleY: [0, 1], originY: 0 }}
-                    transition={{ duration: 1 }}
-                  />
-                )}
-              </div>
-            </div>
-
-            <motion.div
-              className={`w-full max-w-md px-8 py-6 rounded-2xl border transition-all duration-700 border-blue-500 ${
-                isActive("waterfall")
-                  ? "bg-blue-500/20 shadow-[0_0_40px_rgba(59,130,246,0.2)] scale-105"
-                  : isPast("waterfall")
-                    ? "bg-blue-500/5 opacity-60 scale-95"
-                    : "border-white/10 bg-white/5 opacity-30 scale-95"
-              }`}
-            >
-              <h2
-                className={`text-3xl font-bold tracking-widest text-center transition-colors duration-700 mb-4 ${isActive("waterfall") ? "text-blue-400 drop-shadow-[0_0_15px_rgba(59,130,246,0.5)]" : "text-white/40"}`}
-              >
-                WATERFALL
-              </h2>
-              <div className="flex items-center justify-between gap-4 font-mono text-sm tracking-wider">
-                <span
-                  className={`transition-colors duration-500 ${isActive("waterfall") || isPast("waterfall") ? "text-blue-300" : "text-white/20"}`}
-                >
-                  API
-                </span>
-                <span className="text-white/20">→</span>
-                <span
-                  className={`transition-colors duration-500 ${isActive("waterfall") || isPast("waterfall") ? "text-blue-300" : "text-white/20"}`}
-                >
-                  HTML
-                </span>
-                <span className="text-white/20">→</span>
-                <span
-                  className={`transition-colors duration-500 ${isActive("waterfall") || isPast("waterfall") ? "text-blue-300" : "text-white/20"}`}
-                >
-                  HEADLESS
-                </span>
-              </div>
-            </motion.div>
-          </div>
-
-          {/* 3. CASCADE */}
-          <div className="relative w-full flex flex-col items-center">
-            <div
-              className={`w-0.5 h-12 transition-colors duration-700 ${isPast("waterfall") ? "bg-teal-500" : "bg-white/10"}`}
-            >
-              {isActive("waterfall") && !isPopupVisible && (
-                <motion.div
-                  className="w-0.5 h-full bg-teal-400"
-                  animate={{ scaleY: [0, 1], originY: 0 }}
-                  transition={{ duration: 1 }}
-                />
-              )}
-            </div>
-            <motion.div
-              className={`w-full max-w-md px-8 py-6 rounded-2xl border transition-all duration-700 border-teal-500 ${
-                isActive("cascade")
-                  ? "bg-teal-500/20 shadow-[0_0_40px_rgba(20,184,166,0.2)] scale-105"
-                  : isPast("cascade")
-                    ? "bg-teal-500/5 opacity-60 scale-95"
-                    : "border-white/10 bg-white/5 opacity-30 scale-95"
-              }`}
-            >
-              <h2
-                className={`text-3xl font-bold tracking-widest text-center transition-colors duration-700 mb-4 ${isActive("cascade") ? "text-teal-400 drop-shadow-[0_0_15px_rgba(20,184,166,0.5)]" : "text-white/40"}`}
-              >
-                CASCADE
-              </h2>
-              <div className="flex items-center justify-between gap-4 font-mono text-sm tracking-wider">
-                <span
-                  className={`transition-colors duration-500 ${isActive("cascade") || isPast("cascade") ? "text-teal-300" : "text-white/20"}`}
-                >
-                  JSON
-                </span>
-                <span className="text-white/20">→</span>
-                <span
-                  className={`transition-colors duration-500 ${isActive("cascade") || isPast("cascade") ? "text-teal-300" : "text-white/20"}`}
-                >
-                  STATE
-                </span>
-                <span className="text-white/20">→</span>
-                <span
-                  className={`transition-colors duration-500 ${isActive("cascade") || isPast("cascade") ? "text-teal-300" : "text-white/20"}`}
-                >
-                  DOM
-                </span>
-              </div>
-            </motion.div>
-          </div>
-
-          {/* 4. QUALITY */}
-          <div className="relative w-full flex flex-col items-center">
-            <div
-              className={`w-0.5 h-12 transition-colors duration-700 ${isPast("cascade") ? "bg-emerald-500" : "bg-white/10"}`}
-            >
-              {isActive("cascade") && !isPopupVisible && (
-                <motion.div
-                  className="w-0.5 h-full bg-emerald-400"
-                  animate={{ scaleY: [0, 1], originY: 0 }}
-                  transition={{ duration: 1 }}
-                />
-              )}
-            </div>
-            <motion.div
-              className={`w-full max-w-sm px-8 py-5 rounded-2xl border transition-all duration-700 border-emerald-500 ${
-                isActive("quality")
-                  ? "bg-emerald-500/20 shadow-[0_0_40px_rgba(16,185,129,0.2)] scale-105"
-                  : isPast("quality")
-                    ? "bg-emerald-500/5 opacity-60 scale-95"
-                    : "border-white/10 bg-white/5 opacity-30 scale-95"
-              }`}
-            >
-              <h2
-                className={`text-3xl font-bold tracking-widest text-center transition-colors duration-700 ${isActive("quality") ? "text-emerald-400 drop-shadow-[0_0_15px_rgba(16,185,129,0.5)]" : "text-white/40"}`}
-              >
-                QUALITY
-              </h2>
-              <AnimatePresence>
-                {isActive("quality") && !isPopupVisible && (
-                  <motion.div
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: "auto" }}
-                    exit={{ opacity: 0, height: 0 }}
-                    className="overflow-hidden mt-4"
-                  >
-                    <div className="flex flex-col items-center gap-1 opacity-70">
-                      <div className="w-full h-1 bg-emerald-400 rounded-full" />
-                      <div className="w-3/4 h-1 bg-emerald-400 rounded-full" />
-                      <div className="w-1/2 h-1 bg-emerald-400 rounded-full" />
-                      <div className="w-1/4 h-1 bg-emerald-400 rounded-full" />
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </motion.div>
-          </div>
-
-          {/* 5. OUTPUT */}
-          <div className="relative w-full flex flex-col items-center">
-            <div
-              className={`w-0.5 h-12 transition-colors duration-700 ${isPast("quality") ? "bg-white" : "bg-white/10"}`}
-            >
-              {isActive("quality") && !isPopupVisible && (
-                <motion.div
-                  className="w-0.5 h-full bg-white"
-                  animate={{ scaleY: [0, 1], originY: 0 }}
-                  transition={{ duration: 1 }}
-                />
-              )}
-            </div>
-            <motion.div
-              className={`w-full max-w-sm px-8 py-5 rounded-2xl border transition-all duration-700 ${
-                isActive("output") || stageIdx === STAGES.length - 1
-                  ? "border-white/50 bg-white/10 shadow-[0_0_40px_rgba(255,255,255,0.15)] scale-105"
-                  : "border-white/10 bg-white/5 opacity-30 scale-95"
-              }`}
-            >
-              <h2
-                className={`text-2xl font-mono tracking-widest text-center transition-colors duration-700 ${isActive("output") || stageIdx === STAGES.length - 1 ? "text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]" : "text-white/30"}`}
-              >
-                OUTPUT
-              </h2>
-            </motion.div>
+          <div className="flex flex-col w-full px-8 py-8 bg-[#0a0f25]/50 border border-white/5 rounded-3xl shadow-2xl backdrop-blur-xl relative">
+             <div className="absolute -top-px left-1/2 -translate-x-1/2 w-1/2 h-px bg-gradient-to-r from-transparent via-violet-500/50 to-transparent" />
+             
+             {renderNode("strategy", Fingerprint, "1. Strategy", "from-violet-500/40 to-violet-500/40", "text-violet-400")}
+             {renderNode("waterfall", Layers, "2. Waterfall", "from-violet-500/40 to-blue-500/40", "text-blue-400")}
+             {renderNode("cascade", Network, "3. Cascade", "from-blue-500/40 to-teal-500/40", "text-teal-400")}
+             {renderNode("quality", Activity, "4. Quality", "from-teal-500/40 to-emerald-500/40", "text-emerald-400")}
+             {renderNode("output", TerminalSquare, "5. Output", "from-emerald-500/40 to-white/40", "text-white")}
           </div>
         </div>
 
-        {/* STAGE POPUP OVERLAY */}
-        <AnimatePresence>
-          {isPopupVisible && popupData && (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: -20, filter: "blur(10px)" }}
-              transition={{ type: "spring", damping: 20, stiffness: 100 }}
-              className="absolute z-40 w-[640px] max-w-[90vw] rounded-3xl border border-white/10 bg-[#0f111a]/95 backdrop-blur-2xl shadow-[0_0_100px_rgba(0,0,0,0.8)] overflow-hidden"
-            >
-              {/* Glossy Header */}
-              <div
-                className={`relative px-8 py-6 border-b border-white/5 bg-gradient-to-br ${popupData.theme.fromBg} to-transparent`}
+        {/* Right Side: STAGE POPUP OVERLAY */}
+        <div className="flex-1 flex justify-center items-center ml-10">
+          <AnimatePresence mode="wait">
+            {isPopupVisible && popupData && (
+              <motion.div
+                key={popupData.title}
+                initial={{ opacity: 0, x: 40, filter: "blur(10px)" }}
+                animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
+                exit={{ opacity: 0, x: -20, filter: "blur(10px)" }}
+                transition={{ type: "spring", damping: 25, stiffness: 120 }}
+                className={`relative w-full max-w-2xl rounded-3xl border ${popupData.theme.border} bg-[#060b1f]/90 backdrop-blur-3xl overflow-hidden ${popupData.theme.glow}`}
               >
-                <h3
-                  className={`text-2xl font-bold tracking-widest uppercase ${popupData.theme.text} mb-2`}
-                >
-                  {popupData.title}
-                </h3>
-                <p className="text-white/60 text-sm leading-relaxed">
-                  {popupData.subtitle}
-                </p>
-              </div>
+                {/* Accent glow behind popup */}
+                <div className={`absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br ${popupData.theme.fromBg} to-transparent blur-3xl opacity-50 pointer-events-none rounded-full`} />
+                
+                {/* Header */}
+                <div className={`relative px-8 py-6 border-b border-white/5 flex items-center gap-4 bg-gradient-to-r from-white/[0.03] to-transparent`}>
+                  <div className={`p-3 rounded-xl bg-black/40 border ${popupData.theme.border}`}>
+                     <popupData.icon className={`w-6 h-6 ${popupData.theme.text}`} />
+                  </div>
+                  <div>
+                    <h3 className={`text-2xl font-black tracking-tight ${popupData.theme.text} mb-1 drop-shadow-sm`}>
+                      {popupData.title}
+                    </h3>
+                    <p className="text-white/50 text-xs font-mono tracking-wider uppercase">
+                      {popupData.subtitle}
+                    </p>
+                  </div>
+                </div>
 
-              {/* Content Body */}
-              <div className="p-8 space-y-4">
-                {popupData.items && (
-                  <ul className="space-y-4 text-sm md:text-base">
-                    {popupData.items.map((item: any, i: number) => (
-                      <motion.li
-                        key={i}
-                        initial={{ opacity: 0, x: -10 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.1 * i }}
-                        className="flex items-center justify-between"
-                      >
-                        <span className="text-white/40 tracking-wide">
-                          {item.label}
-                        </span>
-                        <span
-                          className={`font-medium ${item.highlight ? `${popupData.theme.highlightText} ${popupData.theme.highlightBg} px-4 py-1.5 rounded-full shadow-inner` : "text-white/90"}`}
+                {/* Content Body */}
+                <div className="p-8 space-y-6 relative z-10">
+                  {popupData.items && (
+                    <ul className="space-y-4">
+                      {popupData.items.map((item: any, i: number) => (
+                        <motion.li
+                          key={i}
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: 0.1 * i }}
+                          className="flex items-center justify-between group"
                         >
-                          {item.value}
-                        </span>
-                      </motion.li>
-                    ))}
-                  </ul>
-                )}
+                          <span className="text-white/40 text-sm font-mono tracking-wide flex items-center gap-3">
+                            <span className="w-1.5 h-1.5 rounded-full bg-white/20 group-hover:bg-white/50 transition-colors" />
+                            {item.label}
+                          </span>
+                          <span className={`font-mono text-sm font-semibold tracking-wide ${item.highlight ? `${popupData.theme.highlightText} ${popupData.theme.highlightBg} px-3 py-1 rounded-md border border-current/20` : "text-white/80"}`}>
+                            {item.value}
+                          </span>
+                        </motion.li>
+                      ))}
+                    </ul>
+                  )}
 
-                {popupData.visual && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.5 }}
-                    className="mt-8 p-5 rounded-xl bg-black/40 border border-white/5 text-center font-mono text-[13px] md:text-sm tracking-widest text-white/50"
-                  >
-                    API <span className="text-white/20 mx-3">→</span>{" "}
-                    <span
-                      className={`text-blue-400 drop-shadow-[0_0_8px_rgba(59,130,246,0.8)] px-3 py-1 bg-blue-500/10 rounded-lg border border-blue-500/20`}
-                    >
-                      HTML
-                    </span>{" "}
-                    <span className="text-white/20 mx-3">→</span> HEADLESS
-                  </motion.div>
-                )}
+                  {popupData.visual && (
+                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }} className="mt-8 relative">
+                       <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 via-transparent to-blue-500/10 rounded-xl blur-md" />
+                       <div className="relative p-5 rounded-xl bg-[#030712] border border-blue-500/30 flex items-center justify-between font-mono text-[11px] font-bold text-white/50 tracking-widest uppercase overflow-hidden">
+                          <motion.div className="absolute top-0 bottom-0 left-0 w-1/3 bg-gradient-to-r from-transparent via-blue-500/10 to-transparent" animate={{ x: ["-100%", "300%"] }} transition={{ duration: 2, repeat: Infinity, ease: "linear" }} />
+                          <span className="opacity-40 line-through decoration-red-500/50">Internal API</span>
+                          <ChevronRight className="w-4 h-4 text-white/20" />
+                          <span className="opacity-40 line-through decoration-red-500/50">HTML DOM</span>
+                          <ChevronRight className="w-4 h-4 text-white/20" />
+                          <span className="text-blue-400 drop-shadow-[0_0_8px_rgba(59,130,246,0.8)] px-3 py-1.5 bg-blue-500/10 rounded-lg border border-blue-500/30 flex items-center gap-2">
+                             <CheckCircle2 className="w-3.5 h-3.5" /> Headless Agent
+                          </span>
+                       </div>
+                    </motion.div>
+                  )}
 
-                {popupData.snippet && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.5 }}
-                    className="mt-8 p-5 rounded-xl bg-black/40 border border-white/5 font-mono text-sm text-emerald-300 whitespace-pre-wrap leading-relaxed shadow-inner"
-                  >
-                    {popupData.snippet}
-                  </motion.div>
-                )}
+                  {popupData.snippet && (
+                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }} className="mt-6">
+                       <div className="bg-[#030712] border border-emerald-500/20 rounded-xl p-5 shadow-inner relative overflow-hidden">
+                          <div className="absolute left-0 top-0 bottom-0 w-1 bg-emerald-500/50" />
+                          <pre className="font-mono text-xs text-emerald-400/80 whitespace-pre-wrap leading-relaxed">
+                            {popupData.snippet}
+                          </pre>
+                       </div>
+                    </motion.div>
+                  )}
 
-                {popupData.codeSnippet && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.2 }}
-                    className="mt-6 p-6 rounded-2xl bg-[#080a10] border border-white/10 font-mono text-[13px] leading-relaxed text-white/80 overflow-x-auto shadow-inner"
-                  >
-                    <pre>
-                      <code
-                        dangerouslySetInnerHTML={{
-                          __html: popupData.codeSnippet
-                            .replace(
-                              /"([^"]+)":/g,
-                              '<span class="text-blue-300">"$1"</span>:',
-                            )
-                            .replace(
-                              /: "([^"]+)"/g,
-                              ': <span class="text-emerald-300">"$1"</span>',
-                            )
-                            .replace(
-                              /: ([0-9]+)/g,
-                              ': <span class="text-orange-300">$1</span>',
-                            ),
-                        }}
-                      />
-                    </pre>
-                  </motion.div>
-                )}
-              </div>
-
-              {/* Footer / Controls */}
-              <div className="px-8 py-4 border-t border-white/5 bg-white/5 flex items-center justify-end">
-                <span className="text-white/30 text-xs tracking-wider uppercase flex items-center gap-3 font-semibold">
-                  Press Space / Arrow Down to continue{" "}
-                  <kbd className="px-2 py-0.5 rounded border border-white/10 bg-white/10 font-mono text-white/50 shadow-inner">
-                    →
-                  </kbd>
-                </span>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+                  {popupData.codeSnippet && (
+                    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="mt-6 group">
+                      <div className="relative bg-[#030712] border border-white/10 rounded-xl p-6 overflow-hidden transition-all duration-500 hover:border-white/30 shadow-2xl">
+                        {/* Fake title bar */}
+                        <div className="absolute top-0 inset-x-0 h-8 bg-white/[0.02] border-b border-white/5 flex items-center px-4 gap-2">
+                           <div className="w-2.5 h-2.5 rounded-full bg-red-500/50" />
+                           <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/50" />
+                           <div className="w-2.5 h-2.5 rounded-full bg-green-500/50" />
+                           <span className="ml-2 font-mono text-[9px] text-white/30 tracking-widest pl-2 border-l border-white/10">payload.json</span>
+                        </div>
+                        <pre className="mt-6 font-mono text-[11px] leading-relaxed text-slate-300 drop-shadow-sm">
+                          <code dangerouslySetInnerHTML={{
+                              __html: popupData.codeSnippet
+                                .replace(/"([^"]+)":/g, '<span class="text-indigo-300">"$1"</span>:')
+                                .replace(/: "([^"]+)"/g, ': <span class="text-emerald-300">"$1"</span>')
+                                .replace(/: ([0-9]+)/g, ': <span class="text-orange-300">$1</span>')
+                                .replace(/\[|\]|\{|\}/g, '<span class="text-white/40">$&</span>')
+                          }} />
+                        </pre>
+                      </div>
+                    </motion.div>
+                  )}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
       </motion.div>
+
+      {/* Footer Hint */}
+      <div className="absolute bottom-8 right-8 z-50 pointer-events-none">
+        <div className="flex items-center gap-3 px-4 py-2 rounded-full border border-white/5 bg-white/[0.02] backdrop-blur-sm">
+          <span className="text-white/30 text-[9px] tracking-[0.2em] uppercase font-bold">
+            Space to Advance
+          </span>
+        </div>
+      </div>
     </div>
   );
 }

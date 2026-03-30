@@ -116,7 +116,9 @@ Because SCOUT isn’t a tool.
 It’s a system that decides how to get the data.`,
 
   // Slide 6: ScoutFlow (11 steps)
-  `Now, here’s how it works.`,
+  `Now, here’s how it works.
+First, strategy.
+  `,
 
   `It looks at the website, and it decides how to handle it.
 If it knows the site, it uses a precise plan.
