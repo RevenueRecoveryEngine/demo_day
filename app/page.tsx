@@ -30,10 +30,10 @@ const SLIDE_CONFIG = [
   { component: StoryTheMismatch, steps: 3 },
   { component: StoryTheRootCause, steps: 3 },
   { component: TheIndustryProblem, steps: 8 },
-  { component: SystemNodes, steps: 5 },
-  { component: TheHardTruths, steps: 4 },
-  { component: SystemArchitecture, steps: 3 },
-  { component: ChaosToScout, steps: 2 },
+  { component: SystemArchitecture, steps: 2 }, // Must be 2
+  { component: SystemNodes, steps: 5 }, // Must be 5
+  { component: TheHardTruths, steps: 4 }, // Must be 4
+  { component: ChaosToScout, steps: 2 }, // Must be 2
   { component: ScoutFlow, steps: 11 },
   { component: LlmInconsistency, steps: 5 },
   { component: StoryLlmExtraction, steps: 3 },
