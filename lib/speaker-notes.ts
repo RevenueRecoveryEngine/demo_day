@@ -1,3 +1,5 @@
+import type { DemoStage } from '@/lib/types';
+
 export const MASTER_SCRIPT = [
   // Slide 0: Title Screen (1 click)
   `Hello everyone, we are Team 6, and our project is RRE: the Revenue Recovery Engine.`,
@@ -232,3 +234,42 @@ We go back to it.`,
 
 It’s the foundation.`
 ];
+
+export interface SectionNote {
+  section: string;
+  cue: string;
+}
+
+export const SECTION_NOTES: Record<string, SectionNote> = {
+  intro: {
+    section: 'Opening',
+    cue: 'Set the context and the stakes before the technical deep dive.',
+  },
+  problem: {
+    section: 'Problem',
+    cue: 'Anchor every point in return-rate impact and listing ambiguity.',
+  },
+  solution: {
+    section: 'Solution',
+    cue: 'Frame SCOUT, CRITIC, and PRESCRIBER as one reliability pipeline.',
+  },
+  demo: {
+    section: 'Live Demo',
+    cue: 'Narrate decisions and evidence, not just interface actions.',
+  },
+  close: {
+    section: 'Closing',
+    cue: 'Reinforce consistency, defensibility, and measurable business outcome.',
+  },
+};
+
+export const STAGE_NOTES: Partial<Record<DemoStage, string>> = {
+  idle: 'Set the goal and expected output before triggering the flow.',
+  initialize: 'Confirm the product URL and explain why setup quality matters.',
+  strategy: 'Explain known-domain strategy detection and fallback logic.',
+  waterfall: 'Walk through extraction tiers and why escalation is controlled.',
+  cascade: 'Show source prioritization: structured data first, DOM last.',
+  filter: 'Highlight dedupe, weak-signal removal, and evidence ranking.',
+  output: 'Summarize the final evidence package and business decision readiness.',
+  complete: 'Close with reliability gains and next operational step.',
+};
