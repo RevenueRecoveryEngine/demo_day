@@ -2,8 +2,7 @@ import type { DemoStage } from '@/lib/types';
 
 export const MASTER_SCRIPT = [
   // Slide 0: Title Screen (1 click)
-  `Hello everyone we are team 6, 
-and our project is RRE lets dive deep into it`,
+  `Hello everyone, we are Team 6, and our project is RRE: the Revenue Recovery Engine.`,
   
   // Slide 1: Team Screen (1 click)
   `and this our team`,
@@ -12,35 +11,35 @@ and our project is RRE lets dive deep into it`,
   `so imagine You run an online auto parts store.`,
   
   `A customer orders a brake caliper.`, 
-`It arrives… and it doesn’t fit.`,
+  `It arrives… and it doesn’t fit.`,
   
   `Not because it’s broken. 
-Because your listing was vague.`,
+  Because your listing was vague.`,
 
   // Slide 3: The Root Cause (3 clicks)
   `“Fits Ford F-150.”
   
   That’s it. 
 
-No year. No trim. No constraints.`,
+  No year. No trim. No constraints.`,
   
   `And now you pay for the return.`,
 
-// Slide 4: The Industry Problem (8 clicks)
+  // Slide 4: The Industry Problem (8 clicks)
   `This is not an edge case. 
 
-This is the industry.`,
+  This is the industry.`,
 
   `15 to 20 percent return rates… and people call that normal. 
 
-It’s not normal. 
+  It’s not normal. 
 
-It’s what happens when nobody takes product truth seriously.`,
+  It’s what happens when nobody takes product truth seriously.`,
 
   `And here’s the part that’s actually embarrassing: 
-Everyone knows this problem exists. 
+  Everyone knows this problem exists. 
 
-And still… the solution is always the same:`,
+  And still… the solution is always the same:`,
 
   `Another dashboard.`,
 
@@ -51,38 +50,47 @@ And still… the solution is always the same:`,
   `That doesn’t fix anything.`,
 
   `So we did something different. 
-We built the Revenue Recovery Engine.
+  We built the Revenue Recovery Engine.
 
-A system that doesn’t just analyze data…
+  A system that doesn’t just analyze data…
 
-it tells you exactly where your listing is wrong,
-why customers are failing,
-and what to change — with evidence.`,
+  it tells you exactly where your listing is wrong,
+  why customers are failing,
+  and what to change — with evidence.`,
+
 // ==========================================
-  // Slide 5: The System Nodes (5 clicks)
+  // Slide 5: System Architecture (2 clicks)
   // ==========================================
-  `It consistes of Three parts:`,
-  `SCOUT which is resposible for scraping the product listing and reviews`,
-  `CRITIC  which turns the listings and reviews from messy text into structured expectation gaps`,
-  `PRESCRIBER that prescribes edits and flags problems in the listing`,
-  `Outputting the final surgical edits.`,
+  /* Click 1 */ `This is the end-to-end architecture we built. We use Next.js and Supabase for the core, with Inngest reliably orchestrating our background jobs and data pipelines.`,
+  
+  /* Click 2 */ `But the real magic happens right here in the middle, in the AI pipeline. It consists of three specialized agents working together:`,
 
   // ==========================================
-  // Slide 6: The Hard Truths (4 clicks)
+  // Slide 6: The System Nodes (5 clicks)
   // ==========================================
-  `And here’s what we learned building it:`,
-  `If your data pipeline is weak, your AI is useless.`,
-  `If your scraping breaks, your system lies.`,
-  `If your output isn’t defensible, it’s just guesswork with better branding.`,
+  /* Click 1 */ `First, SCOUT, which is responsible for aggressively scraping the product listings, specs, and reviews.`,
+  
+  /* Click 2 */ `Then CRITIC takes over, turning that messy text into structured expectation gaps.`,
+  
+  /* Click 3 */ `Finally, PRESCRIBER acts on those gaps, flagging the exact problems in the listing...`,
+  
+  /* Click 4 */ `...and outputting the final surgical edits.`,
+
+  /* Click 5 */ `But a system diagram is just theory until you see it execute. Let me show you this exact stack in action. Let’s jump into the live demo.`,
+  
+  // *** [PAUSE PRESENTATION, ALT-TAB TO BROWSER FOR 5 MINUTE DEMO] ***
 
   // ==========================================
-  // Slide 7: System Architecture Photo (3 clicks)
+  // Slide 7: The Hard Truths (4 clicks)
   // ==========================================
-  `So instead of showing you another polished demo…`,
-  `we’re going to show you what most people avoid: how to actually build this properly.`,
-  `Starting with scraping.`,
+  // *** [TAB BACK TO PRESENTATION] ***
+  /* Click 1 */ `You just saw it work seamlessly. But here is what we learned actually building it:`,
+  /* Click 2 */ `If your data pipeline is weak, your AI is useless.`,
+  /* Click 3 */ `If your scraping breaks, your system lies.`,
+  /* Click 4 */ `And if your output isn’t defensible, it’s just guesswork with better branding.
+  So we’re going to show you what most people avoid: how to actually build this properly.
+  Starting with the absolute hardest part: scraping.`,
 
-  // --- NEW SCOUT SLIDES ---
 
   // Slide 5: ChaosToScout (2 steps)
   `Let me show you what really happens when you try to extract data from the web.
