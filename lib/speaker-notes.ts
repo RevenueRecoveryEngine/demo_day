@@ -93,80 +93,83 @@ export const MASTER_SCRIPT = [
 
 
   // Slide 5: ChaosToScout (2 steps)
-  `Let me show you what really happens when you try to extract data from the web.
+  `Let me show you what actually happens when you try to pull data from the web.
 
-You start with a simple idea:
-fetch the page, parse the HTML, get your data.
+On the surface, it feels simple...
+you open the page, you read the HTML, you grab the data.
 
-But in reality, the web fights back.
+But once you’re in it, you realize pretty quickly... it’s not that easy.
 
-Pages are inconsistent.
-Providers are hidden.
-Anti-bot systems block you.
-And the data you get is noisy and unreliable.
+Websites are messy.
+Some pages block you.
+And a lot of the time, the data you do get back is incomplete... or just wrong.
 
-So your AI ends up making decisions on bad input.
+And then your AI starts making decisions based on bad information.
 
 That’s the real problem.`,
 
-  `Now, instead of treating scraping as a simple step,
-we treated it as a system that needs to think.
+  `So, instead of treating scraping like a simple step... we treated it like something that needs to think.
 
 That’s where SCOUT comes in.
 
-SCOUT is not a scraper.
-It’s a decision engine designed to navigate this chaos.`,
+Because SCOUT isn’t a tool.
+It’s a system that decides how to get the data.`,
 
   // Slide 6: ScoutFlow (11 steps)
-  `When a user submits a product URL, SCOUT takes over.`,
+  `Now, here’s how it works.
+First, strategy.
+  `,
 
-  `First, strategy.
-  It looks at the domain and decides how to approach it —
-pagination, anti-bot behavior, structure.
-
+  `It looks at the website, and it decides how to handle it.
 If it knows the site, it uses a precise plan.
-If not, it falls back to a safe default.`,
+If it doesn’t, it falls back to a safe approach.`,
 
   `Then comes extraction.`,
 
   `SCOUT doesn’t rely on one method.
 
-It starts simple — direct extraction and known providers.
+It starts simple... and if that doesn’t work, it moves up to more advanced approaches—like simulating a real browser.
 
-If that fails, it escalates to headless scraping like ZenRows,
-and can fall back to Apify.`,
+`,
 
-  `At the same time, it looks for the best data source:`,
+  `And while it’s doing that, it’s also looking for the best source of data.`,
 
-  `Shopify JSON first, then headless state, then DOM.
+  `It starts with structured data first...
+then it looks for hidden data...
+and if it has to, it falls all the way back to the raw page.
 
-Always prioritizing signal over noise.`,
+All the way through, it’s prioritizing quality.`,
 
-  `And finally, filtering.`,
+  `And then, finally, filtering.`,
 
-  `It cleans the data, removes duplicates, ranks by signal strength,
-and keeps only the most meaningful insights.`,
+  `It strips out duplicates...
+keeps only what’s actually useful...
+and stays focused on what really matters.`,
 
-  `Because more data is not better.
+  `Because more data isn’t better.
 
 Better data is better.`,
 
-  `At the end, SCOUT delivers structured, reliable evidence.`,
+  `And in the end... SCOUT gives you clean, reliable data.`,
 
   // Slide 7: PostScoutRuntime (5 steps)
-  `And this is the key idea:
+  `That’s really the key idea.
 
-The web is chaotic.
+The web is messy.
 
-  SCOUT brings structure.
+SCOUT makes it clear.
 
-  It doesn’t just scrape.
+It doesn’t just collect data.
 
-It decides.
+It decides how to get the right data.
 
-  And that’s why it’s not an ingestion step.
+But here’s the thing... getting clean data is only half the problem.
 
-  It’s a quality gate for everything that comes next.`,
+Because once you have it, you trust your AI to make a decision.
+
+And that’s where things break again.
+
+Youssef will show you why.`,
 
   `The data is in. Here is exactly what NOT to do next.`,
 
