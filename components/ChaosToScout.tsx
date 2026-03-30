@@ -10,7 +10,7 @@ export function ChaosToScout({ step }: { step: number }) {
     <div className="relative w-full h-screen flex flex-col items-center justify-center overflow-hidden bg-[#020617] px-6 font-sans">
       {/* Background Grid & Dynamic Gradient */}
       <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)] opacity-30 pointer-events-none" />
-      
+
       <motion.div
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[1000px] rounded-full blur-[120px] pointer-events-none opacity-40 mix-blend-screen"
         animate={{
@@ -74,8 +74,8 @@ export function ChaosToScout({ step }: { step: number }) {
                   <Activity className="w-4 h-4 text-red-500/40" />
                 </motion.div>
               ))}
-              
-              <motion.div 
+
+              <motion.div
                 className="absolute inset-0 border border-red-500/20 rounded-3xl"
                 animate={{ opacity: [0.1, 0.5, 0.1] }}
                 transition={{ duration: 0.1, repeat: Infinity, repeatType: "reverse" }}
@@ -154,9 +154,9 @@ export function ChaosToScout({ step }: { step: number }) {
               transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
             >
               <div className="absolute inset-0 bg-gradient-to-br from-violet-600/20 via-blue-600/10 to-transparent" />
-              
+
               {/* Scanning laser line */}
-              <motion.div 
+              <motion.div
                 className="absolute inset-x-0 h-px bg-gradient-to-r from-transparent via-cyan-400/80 to-transparent z-20 shadow-[0_0_10px_rgba(34,211,238,0.8)]"
                 animate={{ top: ["0%", "100%", "0%"] }}
                 transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
@@ -201,7 +201,7 @@ export function ChaosToScout({ step }: { step: number }) {
                   transition={{ duration: 2, repeat: Infinity }}
                 />
                 <span className="text-emerald-400 font-mono font-bold tracking-widest text-sm uppercase relative z-10 text-center drop-shadow-[0_0_10px_rgba(16,185,129,0.8)]">
-                  Clean<br/>Data
+                  Clean<br />Data
                 </span>
               </div>
             </div>
@@ -211,18 +211,18 @@ export function ChaosToScout({ step }: { step: number }) {
 
       {/* Persistent Footer Hint */}
       <div className="absolute bottom-8 w-full flex justify-center z-50 pointer-events-none">
-        <motion.div 
+        <motion.div
           className="flex items-center gap-3 px-5 py-2.5 rounded-full bg-white/5 border border-white/10 backdrop-blur-md"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1 }}
         >
-          <span className="text-white/40 text-[10px] tracking-widest uppercase font-semibold">
+          {/* <span className="text-white/40 text-[10px] tracking-widest uppercase font-semibold">
             Navigate Presentation
           </span>
           <kbd className="px-2.5 py-1 rounded border border-white/10 bg-black/40 font-mono text-white/60 shadow-inner text-xs">
             Space
-          </kbd>
+          </kbd> */}
         </motion.div>
       </div>
     </div>
