@@ -1,89 +1,119 @@
-'use client';
-// app/page.tsx — Ultra-Minimal Presentation Container
+"use client";
 
-import { useState, useEffect } from 'react';
-import { StoryIntro } from '@/components/StoryIntro';
-import { ChaosToScout } from '@/components/ChaosToScout';
-import { ScoutFlow } from '@/components/ScoutFlow';
-import { PostScoutRuntime } from '@/components/PostScoutRuntime';
-import { OrchestrationSlide } from '@/components/OrchestrationSlide';
-import { PresenterModePanel } from '@/components/PresenterModePanel';
+import { useState, useEffect } from "react";
 
-const SLIDES = ['story-intro', 'chaos-to-scout', 'scout-flow', 'post-scout-runtime', 'orchestration'];
+// 1. Import your slides here
+import { TitleSlide } from "@/components/TitleSlide";
+import { TeamSlide } from "@/components/TeamSlide";
+import { IntroSlider } from "@/components/IntroSlider";
+import { ChaosToScout } from "@/components/ChaosToScout";
+import { ScoutFlow } from "@/components/ScoutFlow";
+import { PostScoutRuntime } from "@/components/PostScoutRuntime";
+import { OrchestrationSlide } from "@/components/OrchestrationSlide";
+import { StoryTheMismatch } from "@/components/StoryTheMismatch";
+import { StoryTheRootCause } from "@/components/StoryTheRootCause";
+import { TheIndustryProblem } from "@/components/TheIndustryProblem";
+import { TheBlueprint } from "@/components/TheBlueprint";
+import { SystemNodes } from "@/components/SystemNodes";
+import { TheHardTruths } from "@/components/TheHardTruths";
+import { SystemArchitecture } from "@/components/SystemArchitecture";
+import { LlmInconsistency } from "@/components/LlmInconsistency";
+import { StoryLlmExtraction } from "@/components/TheExtraction";
+// =====================================================================
+// 2. THE SLIDE MASTER LIST
+// Edit this array to add, remove, or reorder slides.
+// "steps" = how many times you press Next before the slide is finished.
+// =====================================================================
+const SLIDE_CONFIG = [
+  { component: TitleSlide, steps: 1 },
+  { component: TeamSlide, steps: 1 },
+  { component: StoryTheMismatch, steps: 3 },
+  { component: StoryTheRootCause, steps: 3 },
+  { component: TheIndustryProblem, steps: 8 },
+  { component: SystemNodes, steps: 5 },
+  { component: TheHardTruths, steps: 4 },
+  { component: SystemArchitecture, steps: 3 },
+  { component: ChaosToScout, steps: 2 },
+  { component: ScoutFlow, steps: 11 },
+  { component: LlmInconsistency, steps: 5 },
+  { component: StoryLlmExtraction, steps: 3 },
+  { component: PostScoutRuntime, steps: 5 },
+  { component: OrchestrationSlide, steps: 4 },
+  { component: TheBlueprint, steps: 5 },
+];
+// Automatically calculates total steps so you never have to manually update it again
+const TOTAL_STEPS = SLIDE_CONFIG.reduce(
+  (total, slide) => total + slide.steps,
+  0,
+);
 
 export default function Home() {
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const [presenterMode, setPresenterMode] = useState(false);
+  const [globalStep, setGlobalStep] = useState(0);
 
-  // Keyboard navigation
   useEffect(() => {
-    const handleKey = (e: KeyboardEvent) => {
-      // Ignore key events inside inputs
-      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
+    const channel = new BroadcastChannel("rre-demo-sync");
 
-      switch (e.key) {
-        case 'ArrowDown':
-        case ' ':
-        case 'ArrowRight':
-          e.preventDefault();
-          setCurrentSlide((prev) => Math.min(prev + 1, SLIDES.length - 1));
-          break;
-        case 'ArrowUp':
-        case 'ArrowLeft':
-          e.preventDefault();
-          setCurrentSlide((prev) => Math.max(prev - 1, 0));
-          break;
-        case 'p':
-        case 'P':
-          setPresenterMode((m) => !m);
-          break;
+    // Listen for commands from the presenter dashboard
+    channel.onmessage = (event) => {
+      if (event.data.action === "setStep") {
+        setGlobalStep(event.data.step);
       }
     };
 
-    window.addEventListener('keydown', handleKey);
-    return () => window.removeEventListener('keydown', handleKey);
+    // Keyboard sync logic
+    const handleKey = (e: KeyboardEvent) => {
+      if (
+        e.target instanceof HTMLInputElement ||
+        e.target instanceof HTMLTextAreaElement
+      )
+        return;
+
+      if (["ArrowRight", "ArrowDown", " "].includes(e.key)) {
+        e.preventDefault();
+        setGlobalStep((p) => {
+          const next = Math.min(p + 1, TOTAL_STEPS - 1);
+          channel.postMessage({ action: "setStep", step: next });
+          return next;
+        });
+      } else if (["ArrowLeft", "ArrowUp"].includes(e.key)) {
+        e.preventDefault();
+        setGlobalStep((p) => {
+          const prev = Math.max(p - 1, 0);
+          channel.postMessage({ action: "setStep", step: prev });
+          return prev;
+        });
+      }
+    };
+
+    window.addEventListener("keydown", handleKey);
+    return () => {
+      channel.close();
+      window.removeEventListener("keydown", handleKey);
+    };
   }, []);
+
+  // =====================================================================
+  // 3. THE MAGICAL CALCULATOR
+  // This loop automatically figures out which slide to show and what
+  // internal animation frame to pass it, based on the global step.
+  // =====================================================================
+  let currentSlideIndex = 0;
+  let internalStep = globalStep;
+
+  for (let i = 0; i < SLIDE_CONFIG.length; i++) {
+    if (internalStep < SLIDE_CONFIG[i].steps) {
+      currentSlideIndex = i;
+      break;
+    }
+    internalStep -= SLIDE_CONFIG[i].steps;
+  }
+
+  // Render the currently active slide, passing its internal step
+  const ActiveSlideComponent = SLIDE_CONFIG[currentSlideIndex].component;
 
   return (
     <main className="w-full h-screen overflow-hidden bg-[#030712]">
-      {/* Active Slide */}
-      {currentSlide === 0 && <StoryIntro />}
-      {currentSlide === 1 && <ChaosToScout />}
-      {currentSlide === 2 && <ScoutFlow />}
-      {currentSlide === 3 && <PostScoutRuntime />}
-      {currentSlide === 4 && <OrchestrationSlide />}
-
-      {/* Navigation dots */}
-      <div className="fixed right-6 top-1/2 -translate-y-1/2 z-40 flex flex-col gap-3">
-        {SLIDES.map((id, i) => (
-          <button
-            key={id}
-            onClick={() => setCurrentSlide(i)}
-            aria-label={`Go to slide ${i + 1}`}
-            className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
-              i === currentSlide
-                ? 'bg-violet-400 scale-125 shadow-[0_0_10px_rgba(139,92,246,0.6)]'
-                : 'bg-white/15 hover:bg-white/35'
-            }`}
-          />
-        ))}
-      </div>
-
-      {/* Presenter Mode Panel */}
-      <PresenterModePanel
-        isVisible={presenterMode}
-        currentSection={SLIDES[currentSlide]}
-        currentStage={'idle'} // simplified for minimal layout
-        sectionIndex={currentSlide}
-        totalSections={SLIDES.length}
-      />
-
-      {/* Keyboard hint */}
-      <div className="fixed top-6 left-6 z-30 flex items-center gap-3 px-4 py-2 rounded-full border border-white/10 bg-white/5 backdrop-blur text-white/30 text-xs shadow-xl pointer-events-none">
-        <span>Space / Arrows to navigate</span>
-        <span className="w-px h-3 bg-white/15" />
-        <span>P for presenter mode</span>
-      </div>
+      <ActiveSlideComponent step={internalStep} />
     </main>
   );
 }
