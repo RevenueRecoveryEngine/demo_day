@@ -157,24 +157,33 @@ It decides.
   And that’s why it’s not an ingestion step.
 
   It’s a quality gate for everything that comes next.`,
-  // Slide 7: PostScoutRuntime (5 steps)
-  `So now you've seen the data come in. Let me tell you what not to do with it.
 
-You take the data, send it to an LLM, and expect a reliable decision back. But in practice, that’s not what happens. The model gives you an answer, and if you run it again on the same input, you can get a different one.
+  `The data is in. Here is exactly what NOT to do next.`,
 
-Meanwhile, your system doesn’t wait. It already acted on one of those outputs. In our case, that means telling a merchant to change their product listing — and they apply it. At that point, it’s not just an AI response anymore. It’s a business decision based on something that isn’t consistent.
+  `Do not hand it to an LLM expecting a reliable business decision. Because you won't get one.`,
 
-So instead of asking what the LLM can do, focous on where it fails — and removed it from those parts.`,
+  `LLMs are non-deterministic. Run the exact same input twice, you get two different answers.`,
 
+  `Meanwhile, your system doesn’t wait. It already acted on one of those outputs.`,
+
+  `In our case, that means telling a merchant to change their product listing — and they apply it. At that point, it’s not just an AI response anymore. It’s a business decision based on something that isn’t consistent.`,
+
+  // ==========================================
+  // Slide 11: The Extraction (3 clicks)
+  // ==========================================
+  `So instead of asking what the LLM can do,`,
+
+  `focus on where it fails —`,
+
+  `and removed it from those parts.`,
   `in our case 
-After SCOUT, everything goes into CRITIC.
+After SCOUT, everything goes into CRITIC.`,
 
-CRITIC finds where the listing says one thing and customers report something else.
+`CRITIC finds where the listing says one thing and customers report something else.
 
 We still use an LLM, but only to extract structured attributes. No decisions, just turning text into structured data.`,
 
-  `From there, everything is handled in code. We validate against a strict schema, and if something is missing or inconsistent, we handle it directly. No second model call, no guessing.`,
-
+`From here, deterministic code takes over. We validate against a strict schema. If a data point is missing, the logic gate handles it. No second model calls. No guessing.`,
   `Then PRESCRIBER takes those gaps and suggests edits, but only when they’re clearly supported by the data. If the evidence isn’t there, it doesn’t try to fill it in. It flags it.`,
 
   `The principle is simple. Don’t ask AI to do things it’s bad at. LLMs are excellent at transforming language, but unreliable when you expect precision.

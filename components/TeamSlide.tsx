@@ -1,25 +1,17 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Terminal, Shield, Cpu, Target, PenTool, Layout } from "lucide-react";
+import { Terminal, Shield, Cpu, Target } from "lucide-react";
 
 const TEAM_MEMBERS = {
-  product: [
-    { name: "Sahal Alarabi", role: "Product Manager / Operations" },
-    { name: "Derek Homer", role: "Product Manager / Mentor" },
-    { name: "Jason Gingras", role: "Product Manager / Mentor" },
-    { name: "Cedric WEMIN", role: "Product Manager" },
-    { name: "Stuti Garg", role: "Product Manager" },
-    { name: "Sam Kisumbi", role: "Product Manager" },
-  ],
+  pm: [{ name: "Sahal Alarabi" }, { name: "Derek Homer" }],
   engineering: [
     { name: "Jibin Kunjumon" },
     { name: "Lifei Liu" },
     { name: "Hamza Chraim" },
     { name: "Youssef Mohammed Abdelal" },
   ],
-  // You can safely delete this design array or empty it later without breaking the UI
-  design: [{ name: "Hongjing Zhu", role: "Product Designer" }],
+  mentor: [{ name: "Jason Gingras" }],
 };
 
 export function TeamSlide() {
@@ -27,26 +19,25 @@ export function TeamSlide() {
     hidden: { opacity: 0 },
     show: {
       opacity: 1,
-      transition: { staggerChildren: 0.15 },
+      transition: { staggerChildren: 0.05 },
     },
   };
 
   const itemVariants = {
     hidden: { opacity: 0, y: 20 },
-    show: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+    show: { opacity: 1, y: 0, transition: { duration: 0.3 } },
   };
 
   // Dynamically build the columns based on available data
   const columns = [
     {
-      key: "product",
+      key: "pm",
       title: "Product",
       icon: Target,
-      members: TEAM_MEMBERS.product,
+      members: TEAM_MEMBERS.pm,
       theme: {
         text: "text-blue-400",
         bg: "bg-blue-500/20",
-        subtext: "text-blue-300/70",
         MemberIcon: Shield,
       },
     },
@@ -58,24 +49,22 @@ export function TeamSlide() {
       theme: {
         text: "text-violet-400",
         bg: "bg-violet-500/20",
-        subtext: "text-violet-300/70",
         MemberIcon: Cpu,
       },
     },
   ];
 
-  // Safely add the design column only if it exists and has members
-  if (TEAM_MEMBERS.design && TEAM_MEMBERS.design.length > 0) {
+  // Add mentor column if it exists and has members
+  if (TEAM_MEMBERS.mentor && TEAM_MEMBERS.mentor.length > 0) {
     columns.push({
-      key: "design",
-      title: "UX & Design",
-      icon: PenTool,
-      members: TEAM_MEMBERS.design,
+      key: "mentor",
+      title: "Mentor",
+      icon: Shield,
+      members: TEAM_MEMBERS.mentor,
       theme: {
-        text: "text-pink-400",
-        bg: "bg-pink-500/20",
-        subtext: "text-pink-300/70",
-        MemberIcon: Layout,
+        text: "text-emerald-400",
+        bg: "bg-emerald-500/20",
+        MemberIcon: Shield,
       },
     });
   }
@@ -85,6 +74,7 @@ export function TeamSlide() {
       <motion.h2
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3 }}
         className="text-4xl md:text-5xl font-bold mb-16 text-center pt-10"
       >
         The <span className="text-violet-500">Task Force</span>
