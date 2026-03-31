@@ -20,6 +20,7 @@ import { TheHardTruths } from "@/components/TheHardTruths";
 import { SystemArchitecture } from "@/components/SystemArchitecture";
 import { LlmInconsistency } from "@/components/LlmInconsistency";
 import { StoryLlmExtraction } from "@/components/TheExtraction";
+import { JoinUsSlide } from "@/components/JoinUsSlide";
 // =====================================================================
 // 2. THE SLIDE MASTER LIST
 // Edit this array to add, remove, or reorder slides.
@@ -41,6 +42,7 @@ const SLIDE_CONFIG = [
   { component: PostScoutRuntime, steps: 5 },
   { component: OrchestrationSlide, steps: 4 },
   { component: TheBlueprint, steps: 5 },
+  { component: JoinUsSlide, steps: 2 },
 ];
 // Automatically calculates total steps so you never have to manually update it again
 const TOTAL_STEPS = SLIDE_CONFIG.reduce(

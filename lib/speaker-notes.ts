@@ -3,16 +3,16 @@ import type { DemoStage } from '@/lib/types';
 export const MASTER_SCRIPT = [
   // Slide 0: Title Screen (1 click)
   `Hello everyone, we are Team 6, and our project is RRE: the Revenue Recovery Engine.`,
-  
+
   // Slide 1: Team Screen (1 click)
   `and this our team`,
 
   // Slide 2: The Mismatch (3 clicks)
   `so imagine You run an online auto parts store.`,
-  
-  `A customer orders a brake caliper.`, 
+
+  `A customer orders a brake caliper.`,
   `It arrives… and it doesn’t fit.`,
-  
+
   `Not because it’s broken. 
   Because your listing was vague.`,
 
@@ -22,7 +22,7 @@ export const MASTER_SCRIPT = [
   That’s it. 
 
   No year. No trim. No constraints.`,
-  
+
   `And now you pay for the return.`,
 
   // Slide 4: The Industry Problem (8 clicks)
@@ -62,22 +62,22 @@ export const MASTER_SCRIPT = [
   // Slide 5: System Architecture (2 clicks)
   // ==========================================
   /* Click 1 */ `This is the end-to-end architecture we built. We use Next.js and Supabase for the core, with Inngest reliably orchestrating our background jobs and data pipelines.`,
-  
+
   /* Click 2 */ `But the real magic happens right here in the middle, in the AI pipeline. It consists of three specialized agents working together:`,
 
   // ==========================================
   // Slide 6: The System Nodes (5 clicks)
   // ==========================================
   /* Click 1 */ `First, SCOUT, which is responsible for aggressively scraping the product listings, specs, and reviews.`,
-  
+
   /* Click 2 */ `Then CRITIC takes over, turning that messy text into structured expectation gaps.`,
-  
+
   /* Click 3 */ `Finally, PRESCRIBER acts on those gaps, flagging the exact problems in the listing...`,
-  
+
   /* Click 4 */ `...and outputting the final surgical edits.`,
 
   /* Click 5 */ `But a system diagram is just theory until you see it execute. Let me show you this exact stack in action. Let’s jump into the live demo.`,
-  
+
   // *** [PAUSE PRESENTATION, ALT-TAB TO BROWSER FOR 5 MINUTE DEMO] ***
 
   // ==========================================
@@ -192,11 +192,11 @@ Youssef will show you why.`,
   `in our case 
 After SCOUT, everything goes into CRITIC.`,
 
-`CRITIC finds where the listing says one thing and customers report something else.
+  `CRITIC finds where the listing says one thing and customers report something else.
 
 We still use an LLM, but only to extract structured attributes. No decisions, just turning text into structured data.`,
 
-`From here, deterministic code takes over. We validate against a strict schema. If a data point is missing, the logic gate handles it. No second model calls. No guessing.`,
+  `From here, deterministic code takes over. We validate against a strict schema. If a data point is missing, the logic gate handles it. No second model calls. No guessing.`,
   `Then PRESCRIBER takes those gaps and suggests edits, but only when they’re clearly supported by the data. If the evidence isn’t there, it doesn’t try to fill it in. It flags it.`,
 
   `The principle is simple. Don’t ask AI to do things it’s bad at. LLMs are excellent at transforming language, but unreliable when you expect precision.
@@ -204,7 +204,7 @@ We still use an LLM, but only to extract structured attributes. No decisions, ju
 If you don’t know the difference, you shouldn’t be building with them.
 
 Jibin, tell them how we kept this system running reliably on serverless infrastructure.`,
-// Slide 8: OrchestrationSlide (4 steps)
+  // Slide 8: OrchestrationSlide (4 steps)
   `So our pipeline is simple on the surface — SCOUT scrapes, CRITIC analyses, PRESCRIBER drafts the fix.`,
 
   `That's 3 separate AI operations. Each one can be slow. Each one can fail mid-process.
@@ -216,7 +216,7 @@ If SCOUT finishes but CRITIC crashes halfway through, Inngest doesn't restart th
   `Each job is also observable — we can see in real time which step is running, how long it took, and what failed. During development, that alone saved us hours of debugging.
 The result: a pipeline that runs on serverless infrastructure, handles LLM timeouts gracefully, and doesn't need babysitting.
 That's how three AI agents stay coordinated — without falling apart.`,
-// ==========================================
+  // ==========================================
   // Slide 9: The Blueprint (5 clicks)
   // ==========================================
   `And to close this — none of this works without alignment.`,
@@ -235,7 +235,9 @@ We go back to it.`,
 
   `Because consistency isn’t optional. 
 
-It’s the foundation.`
+It’s the foundation.`,
+  `Rec`,
+  `Rec`,
 ];
 
 export interface SectionNote {
