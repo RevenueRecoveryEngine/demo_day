@@ -1,0 +1,317 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+/* ═══════════════════════════════════════════════════════
+   DARK MODE (default)
+════════════════════════════════════════════════════════ */
+:root {
+  /* ── Brand palette ── */
+  --purple:   #7c3aed;
+  --purple-l: #a855f7;
+  --purple-xl:#c084fc;
+  --blue:     #3b82f6;
+  --blue-l:   #60a5fa;
+  --cyan:     #06b6d4;
+  --pink:     #ec4899;
+  --emerald:  #10b981;
+  --amber:    #f59e0b;
+
+  /* ── Global surface ── */
+  --bg:              #03030a;
+  --surface:         #07070f;
+  --scene-bg-1:      #03030a;
+  --scene-bg-2:      linear-gradient(180deg, #03030a 0%, #08020e 100%);
+  --scene-bg-3:      #08020e;
+  --scene-bg-4:      linear-gradient(135deg, #04011a 0%, #060218 40%, #020110 100%);
+  --scene-bg-5:      linear-gradient(180deg, #020110 0%, #030512 100%);
+  --scene-bg-6:      linear-gradient(180deg, #030512 0%, #04060f 100%);
+  --scene-bg-8:      linear-gradient(135deg, #03030a 0%, #0d0420 50%, #03030a 100%);
+  --scene-bg-team:   linear-gradient(180deg, #03030a 0%, #06030f 50%, #03030a 100%);
+
+  /* ── Typography ── */
+  --text:          #ffffff;
+  --text-90:       rgba(255,255,255,0.9);
+  --text-75:       rgba(255,255,255,0.75);
+  --text-60:       rgba(255,255,255,0.6);
+  --text-55:       rgba(255,255,255,0.55);
+  --text-45:       rgba(255,255,255,0.45);
+  --text-35:       rgba(255,255,255,0.35);
+  --text-25:       rgba(255,255,255,0.25);
+  --text-20:       rgba(255,255,255,0.2);
+  --text-15:       rgba(255,255,255,0.15);
+
+  /* ── Glass / cards ── */
+  --glass:         rgba(255,255,255,0.025);
+  --glass-border:  rgba(255,255,255,0.07);
+  --card-bg:       rgba(255,255,255,0.025);
+  --card-border:   rgba(255,255,255,0.07);
+  --card-divider:  rgba(255,255,255,0.06);
+  --card-text:     rgba(255,255,255,0.5);
+  --card-hover:    rgba(255,255,255,0.04);
+
+  /* ── Problem cards ── */
+  --prob-card-bg:  rgba(255,255,255,0.015);
+  --prob-card-border: rgba(255,255,255,0.04);
+  --prob-head:     rgba(255,255,255,0.9);
+  --prob-body:     rgba(255,255,255,0.4);
+
+  /* ── Pipeline section ── */
+  --pipe-bg:       rgba(255,255,255,0.025);
+  --pipe-border:   rgba(255,255,255,0.06);
+  --pipe-desc:     rgba(255,255,255,0.5);
+  --pipe-bullet:   rgba(255,255,255,0.55);
+  --pipe-unit:     rgba(255,255,255,0.3);
+
+  /* ── Grid / watermarks ── */
+  --grid-line:      rgba(168,85,247,0.03);
+  --grid-opacity:   0.022;
+
+  /* ── Nav ── */
+  --nav-logo:          rgba(255,255,255,0.9);
+  --nav-sub:           rgba(255,255,255,0.25);
+  --nav-dot:           rgba(255,255,255,0.18);
+  --nav-scrolled-bg:   rgba(3,3,10,0.82);
+  --nav-scrolled-border: rgba(255,255,255,0.04);
+  --toggle-bg:         rgba(255,255,255,0.07);
+  --toggle-icon:       rgba(255,255,255,0.6);
+
+  /* ── Team ── */
+  --team-bg:    linear-gradient(180deg, #03030a 0%, #06030f 50%, #03030a 100%);
+  --team-title: #ffffff;
+  --team-sub:   rgba(255,255,255,0.35);
+
+  /* ── Scroll indicator ── */
+  --scroll-text:   rgba(255,255,255,0.2);
+  --scroll-border: rgba(168,85,247,0.25);
+  --scroll-dot:    rgba(168,85,247,0.6);
+}
+
+/* ═══════════════════════════════════════════════════════
+   LIGHT MODE
+════════════════════════════════════════════════════════ */
+[data-theme="light"] {
+  --bg:              #f5f4ff;
+  --surface:         #ede9ff;
+  --scene-bg-1:      #f5f4ff;
+  --scene-bg-2:      linear-gradient(180deg, #f5f4ff 0%, #ede9ff 100%);
+  --scene-bg-3:      #ede9ff;
+  --scene-bg-4:      linear-gradient(135deg, #ede9ff 0%, #e8e2ff 40%, #f0eeff 100%);
+  --scene-bg-5:      linear-gradient(180deg, #f0eeff 0%, #e8e3ff 100%);
+  --scene-bg-6:      linear-gradient(180deg, #e8e3ff 0%, #ede9ff 100%);
+  --scene-bg-8:      linear-gradient(135deg, #f5f4ff 0%, #e8e2ff 50%, #f5f4ff 100%);
+  --scene-bg-team:   linear-gradient(180deg, #f4f2ff 0%, #eeeaff 50%, #f4f2ff 100%);
+
+  --text:          #0a0a14;
+  --text-90:       rgba(10,10,20,0.9);
+  --text-75:       rgba(10,10,20,0.75);
+  --text-60:       rgba(10,10,20,0.6);
+  --text-55:       rgba(10,10,20,0.55);
+  --text-45:       rgba(10,10,20,0.45);
+  --text-35:       rgba(10,10,20,0.38);
+  --text-25:       rgba(10,10,20,0.28);
+  --text-20:       rgba(10,10,20,0.22);
+  --text-15:       rgba(10,10,20,0.15);
+
+  --glass:         rgba(255,255,255,0.6);
+  --glass-border:  rgba(0,0,0,0.08);
+  --card-bg:       rgba(255,255,255,0.88);
+  --card-border:   rgba(0,0,0,0.08);
+  --card-divider:  rgba(0,0,0,0.07);
+  --card-text:     rgba(10,10,20,0.6);
+  --card-hover:    rgba(0,0,0,0.03);
+
+  --prob-card-bg:    rgba(255,255,255,0.7);
+  --prob-card-border: rgba(0,0,0,0.07);
+  --prob-head:       rgba(10,10,20,0.9);
+  --prob-body:       rgba(10,10,20,0.5);
+
+  --pipe-bg:       rgba(255,255,255,0.75);
+  --pipe-border:   rgba(0,0,0,0.08);
+  --pipe-desc:     rgba(10,10,20,0.55);
+  --pipe-bullet:   rgba(10,10,20,0.6);
+  --pipe-unit:     rgba(10,10,20,0.35);
+
+  --grid-line:      rgba(124,58,237,0.06);
+  --grid-opacity:   0.04;
+
+  --nav-logo:          rgba(10,10,20,0.9);
+  --nav-sub:           rgba(10,10,20,0.35);
+  --nav-dot:           rgba(10,10,20,0.2);
+  --nav-scrolled-bg:   rgba(245,244,255,0.9);
+  --nav-scrolled-border: rgba(0,0,0,0.07);
+  --toggle-bg:         rgba(0,0,0,0.06);
+  --toggle-icon:       rgba(10,10,20,0.55);
+
+  --team-bg:    linear-gradient(180deg, #f4f2ff 0%, #eeeaff 50%, #f4f2ff 100%);
+  --team-title: #0a0a14;
+  --team-sub:   rgba(10,10,20,0.45);
+
+  --scroll-text:   rgba(10,10,20,0.3);
+  --scroll-border: rgba(124,58,237,0.25);
+  --scroll-dot:    rgba(124,58,237,0.5);
+}
+
+/* ═══════════════════════════════════════════════════════
+   BASE RESET
+════════════════════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  transition: background 0.4s ease, color 0.4s ease;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', system-ui, sans-serif;
+  overflow-x: hidden;
+  transition: background 0.4s ease, color 0.4s ease;
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar { width: 2px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--purple), var(--blue));
+  border-radius: 1px;
+}
+
+/* ═══════════════════════════════════════════════════════
+   UTILITY CLASSES
+════════════════════════════════════════════════════════ */
+.g-purple {
+  background: linear-gradient(135deg, #c084fc 0%, #818cf8 50%, #38bdf8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.g-fire {
+  background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.g-blue {
+  background: linear-gradient(135deg, #60a5fa, #a78bfa);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.g-emerald {
+  background: linear-gradient(135deg, #10b981, #06b6d4);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.glass {
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+}
+
+/* ═══════════════════════════════════════════════════════
+   KEYFRAMES
+════════════════════════════════════════════════════════ */
+@keyframes drift {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  33%       { transform: translate(30px, -20px) rotate(2deg); }
+  66%       { transform: translate(-20px, 15px) rotate(-1deg); }
+}
+
+@keyframes streamLeft {
+  0%   { transform: translateX(-120%) skewX(-8deg); opacity: 0; }
+  20%  { opacity: 0.6; }
+  80%  { opacity: 0.4; }
+  100% { transform: translateX(120vw) skewX(-8deg); opacity: 0; }
+}
+
+@keyframes orb-pulse {
+  0%, 100% { opacity: 0.5; transform: scale(1); }
+  50%       { opacity: 0.9; transform: scale(1.08); }
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes spin-reverse {
+  from { transform: rotate(360deg); }
+  to   { transform: rotate(0deg); }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+@keyframes data-flow {
+  0%   { stroke-dashoffset: 200; opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { stroke-dashoffset: 0; opacity: 0; }
+}
+
+@keyframes float-up {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-12px); }
+}
+
+@keyframes shimmer-line {
+  0%   { left: -100%; }
+  100% { left: 200%; }
+}
+
+/* ═══════════════════════════════════════════════════════
+   SCENE BASE
+════════════════════════════════════════════════════════ */
+section {
+  position: relative;
+  overflow: hidden;
+  transition: background 0.4s ease;
+}
+
+/* ── Chapter nav markers ── */
+.chapter-label {
+  position: absolute;
+  top: 28px;
+  font-size: 10px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--text-35);
+  z-index: 20;
+  font-weight: 500;
+}
+
+/* ── Stream light ── */
+.light-stream {
+  position: absolute;
+  height: 2px;
+  border-radius: 2px;
+  pointer-events: none;
+  animation: streamLeft linear infinite;
+}
+
+/* ── Noise overlay ── */
+.noise-overlay::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .split-grid { grid-template-columns: 1fr !important; }
+  .pipeline-grid { grid-template-columns: 1fr !important; }
+  .demo-capture-grid { grid-template-columns: 1fr !important; }
+  .demo-list-grid { grid-template-columns: 1fr !important; }
+}
